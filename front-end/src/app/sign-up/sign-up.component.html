@@ -1,0 +1,62 @@
+<mat-card>
+
+  <mat-card-content>
+
+    <h3>Sign Up</h3>
+
+    <form class="example-form">
+
+      <mat-form-field class="example-full-width">
+        <input 
+          [(ngModel)]="signUpData.email"
+          matInput placeholder="E-mail" 
+          type="email"
+          name="email">
+      </mat-form-field>
+
+      <br>
+
+      <mat-form-field class="example-full-width">
+        <input 
+          [(ngModel)]="signUpData.password"
+          matInput placeholder="Password" 
+          type="password"
+          name="password">
+      </mat-form-field>
+
+      <br>
+
+      <mat-form-field class="example-full-width">
+        <input 
+          [(ngModel)]="signUpData.firstName"
+          matInput placeholder="First Name" 
+          type="text"
+          name="firstName">
+      </mat-form-field>
+
+      <br>
+
+      <mat-form-field class="example-full-width">
+        <input 
+          [(ngModel)]="signUpData.lastName"
+          matInput placeholder="Last Name" 
+          type="text"
+          name="lastName">
+      </mat-form-field>
+
+      <br>
+
+      <button 
+        mat-button 
+        (click)="Post()"> Sign Up 
+      </button>
+
+    </form>
+
+  </mat-card-content>
+
+</mat-card>
+
+
+
+

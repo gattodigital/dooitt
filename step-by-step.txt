@@ -1,0 +1,42 @@
+STEP-BY-STEP: DOO ITT
+
+
+#START PROJECT
+
+1. Create Angular CLI project:
+- open console.
+- ng new project-name
+
+2. Install basic dependencies
+- Bootstrap...
+-- cd project name
+-- npm install bootstrap
+-- add bootstrap to angular.json file:
+-- "node_modules/bootstrap/dist/css/bootstrap.min.css"
+
+3. Create header and footer components:
+-- ng g c header
+-- ng g c footer
+
+4. Include header/footer on main app.component:
+-- <app-header> / <app-footer>
+
+
+#ROUTING
+
+5. Create Routing Module:
+-- ng generate module app-routing --flat --module=app
+-- add imports in app-routing.module.ts, and app.module.ts:
+--- import { CommonModule } from '@angular/common';
+    import { RouterModule, Routes } from '@angular/router';
+--- import { AppRoutingModule } from './/app-routing.module';
+
+
+#PORTAL
+
+5. Create portal component:
+-- ng g c portal
+-- include <app-portal> tag on app home.
+--- create sign-in/sign-up buttons.
+
+6. Create sign-in / sign-up components

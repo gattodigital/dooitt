@@ -1,0 +1,22 @@
+<div id="portal">
+
+  <hr>
+  
+  <button 
+    mat-button 
+    *ngIf="!apiService.authenticatedUser"
+    routerLink="/sign-in">Sign In
+  </button>
+
+  <button 
+    mat-button 
+    *ngIf="!apiService.authenticatedUser"
+    routerLink="/sign-up">Sign Up
+  </button>
+
+  <hr>
+
+</div>
+<!-- /#portal -->
+
+
