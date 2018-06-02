@@ -1,20 +1,20 @@
 <div id="portal">
 
-  <hr>
-  
   <button 
-    mat-button 
+    mat-raised-button
+    id="signInButton"
+    class="action-button"
     *ngIf="!apiService.authenticatedUser"
     routerLink="/sign-in">Sign In
   </button>
 
   <button 
-    mat-button 
+    mat-raised-button
+    id="signUpButton"
+    class="action-button"
     *ngIf="!apiService.authenticatedUser"
     routerLink="/sign-up">Sign Up
   </button>
-
-  <hr>
 
 </div>
 <!-- /#portal -->

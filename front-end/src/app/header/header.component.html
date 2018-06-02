@@ -1,20 +1,21 @@
 <mat-toolbar>
   
-  <a routerLink="/">
-    <img src="../assets/ar_logo_blk.png" alt="Andres Ramirez, logo" style="max-width: 50px">
-  </a>
+  <div class="app-logo">
+    <a routerLink="/">
+      <img src="../assets/ar_logo_blk.png" alt="Andres Ramirez, logo">
+    </a>
+  </div>
   
-  <h1>{{ title }}</h1>
-
-  <button 
+<!--   <button 
     mat-button routerLink="/users">Users
   </button>
 
   <button 
     mat-button routerLink="/post">Post
-  </button>
+  </button> -->
 
   <button 
+    id="logOutButton"
     mat-button 
     *ngIf="apiService.authenticatedUser"
     (click)="apiService.logOut()"

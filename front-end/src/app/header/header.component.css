@@ -1,0 +1,24 @@
+mat-toolbar {
+  height: auto;
+  background: #444;
+  margin-bottom: 65px;
+}
+.app-logo {
+  text-align: center;
+  margin: 15px auto -50px;
+  background: #fff;
+  border-radius: 50%;
+  border: 5px solid #9ACD32;
+  height: 150px;
+  width: 150px;
+  z-index: 1;
+}
+.app-logo img {
+  margin-top:35px;
+  max-width: 100px;
+}
+#logOutButton {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}

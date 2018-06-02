@@ -1,31 +1,30 @@
-<mat-card>
+<div id="signIn">
+  
+  <h3>Sign In</h3>
 
-  <mat-card-content>
+  <form class="example-form">
 
-    <h3>Sign In</h3>
+    <mat-form-field class="example-full-width">
+      <input 
+        [(ngModel)]="signInData.email"
+        matInput placeholder="E-mail" 
+        type="email"
+        name="email">
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <input 
+        [(ngModel)]="signInData.password"
+        matInput placeholder="Password" 
+        type="password"
+        name="password">
+    </mat-form-field>
+    <br>
+    <button mat-button (click)="Post()"> Sign In </button>
 
-    <form class="example-form">
+  </form>
 
-      <mat-form-field class="example-full-width">
-        <input 
-          [(ngModel)]="signInData.email"
-          matInput placeholder="E-mail" 
-          type="email"
-          name="email">
-      </mat-form-field>
-      <br>
-      <mat-form-field class="example-full-width">
-        <input 
-          [(ngModel)]="signInData.password"
-          matInput placeholder="Password" 
-          type="password"
-          name="password">
-      </mat-form-field>
-      <br>
-      <button mat-button (click)="Post()"> Sign In </button>
+</div>
 
-    </form>
 
-  </mat-card-content>
 
-</mat-card>
