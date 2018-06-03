@@ -1,0 +1,25 @@
+<h1>Let's Doo Itt!</h1>
+<hr>
+
+<div class="row">
+  <div class="col-sm-6">
+    <h3>Top Priority</h3>
+      <ul class="list-group">
+        <li 
+          class="list-group-item" 
+          *ngFor="let task of apiService.tasks | slice:0:4"
+          [routerLink]="['/main/task-details', task._id]">
+          {{ task.taskDescription }}
+        </li>
+      </ul>
+  </div>
+
+  <div class="col-sm-6">
+    <h3>Add Task</h3>
+      <app-task-add></app-task-add> 
+  </div>
+  <div class="col-sm-12">
+    <h3>My Calendar</h3>
+  </div>
+
+</div>

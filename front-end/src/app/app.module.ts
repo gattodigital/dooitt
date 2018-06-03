@@ -10,7 +10,11 @@ import { MatButtonModule,
          MatToolbarModule, 
          MatInputModule, 
          MatListModule,
-         MatMenuModule } from '@angular/material';
+         MatMenuModule,
+         MatGridListModule,
+         MatSelectModule,
+         MatDatepickerModule,
+         MatNativeDateModule } from '@angular/material';
 
 
 import { AuthInterceptorService } from './auth-interceptor.service';
@@ -24,6 +28,10 @@ import { FooterComponent } from './footer/footer.component';
 import { PortalComponent } from './portal/portal.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { MainComponent } from './main/main.component';
+import { ConfirmComponent } from './sign-up/confirm/confirm.component';
+import { TaskAddComponent } from './main/task-add/task-add.component';
+import { TaskDetailsComponent } from './main/task-details/task-details.component';
 
 
 const routes: Routes = [
@@ -31,8 +39,10 @@ const routes: Routes = [
   { path: 'portal', component: PortalComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
+  { path: 'sign-up/confirm', component: ConfirmComponent },
   { path: 'users', component: UsersComponent },
-  { path: 'post', component: PostComponent },
+  { path: 'main', component: MainComponent },
+  { path: 'main/task-details/:id', component: TaskDetailsComponent },
   { path: 'profile/:id', component: ProfileComponent }
 
 ];
@@ -48,7 +58,11 @@ const routes: Routes = [
     MessagesComponent,
     UsersComponent,
     PostComponent,
-    ProfileComponent
+    ProfileComponent,
+    MainComponent,
+    ConfirmComponent,
+    TaskAddComponent,
+    TaskDetailsComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -61,6 +75,10 @@ const routes: Routes = [
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatGridListModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     BrowserAnimationsModule
   ],
   providers: [ApiService, {

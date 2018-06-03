@@ -1,26 +1,23 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Input } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { environment } from '../environments/environment'
 
 
 @Injectable()
 
 export class ApiService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient, 
+    private route: Router
+    ){}
 
-  messages = []
-  users = []
+  users     = []
+  tasks     = []
   TOKEN_KEY = 'token'
-
-  path = 'http://localhost:3000';
-  authPath ='http://localhost:3000/authorization';
-
-  // get messages from backend
-  getMessage(userId) {
-    this.http.get<any>(this.path + '/posts/' + userId).subscribe( res => {
-      this.messages = res;
-    })
-  }
+  path      = 'http://localhost:3000';
+  authPath  ='http://localhost:3000/authorization';
 
   // get token
   get token() {
@@ -37,11 +34,22 @@ export class ApiService {
     localStorage.removeItem(this.TOKEN_KEY);
   }
 
-  // post messages to backend
-  postMessage(message) {
-    this.http.post<any>(this.path + '/post', message).subscribe( res => {
-      this.messages = res;
+  // post tasks to backend
+  postTask(task) {
+    this.http.post<any>(this.path + '/tasks', task).subscribe( res => {
+      this.tasks = res;
     })
+  }
+
+  // get tasks from backend
+  getTasks() {
+    this.http.get<any>(this.path + '/tasks').subscribe( res => {
+      this.tasks = res;
+    })
+  }
+
+  getTaskDetails(id) {
+    return this.http.get(this.path + '/tasks/' + id);
   }
 
   // get users from backend
@@ -63,9 +71,9 @@ export class ApiService {
       console.log(res) 
       localStorage.setItem(this.TOKEN_KEY, res.token)  
       if(this.authenticatedUser){
-          this.route.navigateByUrl("/")
+          this.route.navigateByUrl("/sign-up/confirm")
       }else{
-          console.log("Registration Failed!")
+        console.log("Registration Failed!")
       }     
     });
   }
@@ -75,8 +83,12 @@ export class ApiService {
     this.http.post<any>(this.authPath + '/sign-in', signInData).subscribe( res => {
       console.log(res);
       localStorage.setItem('token', res.token);
+      if(this.authenticatedUser){
+          this.route.navigateByUrl("/main")
+      }else{
+        console.log("GET OUT!")
+      }     
     });
-
   }
 
 }

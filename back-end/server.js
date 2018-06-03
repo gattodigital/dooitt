@@ -1,48 +1,52 @@
-// required plugins
-var express    = require('express');
-var cors       = require('cors');
-var app        = express();
-var bodyParser = require('body-parser');
-var mongoose   = require('mongoose');
-var jwt        = require('jwt-simple');
+var express       = require('express');
+var cors          = require('cors');
+var app           = express();
+var bodyParser    = require('body-parser');
+var mongoose      = require('mongoose');
+var jwt           = require('jwt-simple');
 var authorization = require('./authorization');
 
-// listen on port 3000
 const port = 3000;
 
-// require users.js + post.js
 var User = require('./models/user.js');
-var Post = require('./models/post.js');
+var Task = require('./models/task.js');
 
-
-// communicate backend - frontend
 app.use(cors());
-// exposes various factories to create middlewares
 app.use(bodyParser.json());
 
+// post tasks to database
+app.post('/tasks', (req, res) => {
+  let taskData = req.body;
+  let task = new Task(taskData);
 
-// get and send posts to frontend
-app.get('/posts/:id',  async(req, res) =>{
-  var author = req.params.id
-  var posts = await Post.find({author})
-  res.send(posts);
-});
-
-// create messages end point
-app.post('/post', (req, res) => {
-
-  var postData = req.body
-  postData.author = '5b0c540b4811ef095e29c7b1'
-  var post = new Post(postData);
-
-  post.save((err, result) => {
+  task.save((err, result) => {
     if(err) {
-      console.error('Saving Post Error!');
-      return res.status(500).send({message: ' Saving Post causing an error!'});
+      console.log("trouble adding task");
+    } else {
+      res.sendStatus(200);
     }
-    res.sendStatus(200);
-  })
+  });
 });
+// get tasks end point
+app.get('/tasks', async (req, res) => {
+  try {
+    let tasks = await Task.find({});
+    res.send(tasks);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+// get task details 
+app.get('/tasks/:id', async (req, res) => {
+  try {
+    let task = await Task.findById(req.params.id);
+    res.send(task);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+})
 
 // get users end point
 app.get('/users', async (req, res) => {
@@ -56,7 +60,7 @@ app.get('/users', async (req, res) => {
   
 });
 
-// get user profiles end point
+// get profiles end point
 app.get('/profile/:id', async (req, res) => {
   try {
     let user = await User.findById(req.params.id, '-password -__v');
@@ -66,10 +70,6 @@ app.get('/profile/:id', async (req, res) => {
     res.sendStatus(500);
   }
 });
-
-// app.post('/sign-up', authorization.signUp);
-
-// app.post('/sign-in', authorization.signIn);
 
 // connect mongoose to db
 mongoose.connect('mongodb://dooitt-admin:QaZsEdC123456@ds235850.mlab.com:35850/dooitt',(err) => {

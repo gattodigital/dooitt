@@ -22,8 +22,10 @@
     "@angular/platform-browser": "^6.0.0",
     "@angular/platform-browser-dynamic": "^6.0.0",
     "@angular/router": "^6.0.0",
+    "angular-calendar": "^0.25.2",
     "bootstrap": "^4.1.1",
     "core-js": "^2.5.4",
+    "ngx-cookie-service": "^1.0.10",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },

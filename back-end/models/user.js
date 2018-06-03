@@ -1,12 +1,12 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt-nodejs');
+var bcrypt   = require('bcrypt-nodejs');
 
-// schema variable
+// database schema objects
 var userSchema = new mongoose.Schema({
-  email: String,
-  password: String,
-  firstName: String,
-  lastName: String
+  email:      String,
+  password:   String,
+  firstName:  String,
+  lastName:   String
 });
 
 userSchema.pre('save', function(next) {
@@ -16,10 +16,8 @@ userSchema.pre('save', function(next) {
     return next()
   // hash user password
   bcrypt.hash(user.password, null, null, (err, hash) => {
-  
   user.password = hash
-  next()
-  // console.log(hash)
+  next();
   });
 });
 

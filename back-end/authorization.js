@@ -1,14 +1,14 @@
-var bcrypt = require('bcrypt-nodejs');
-var jwt    = require('jwt-simple');
-var User   = require('./models/user.js');
+var bcrypt  = require('bcrypt-nodejs');
+var jwt     = require('jwt-simple');
+var User    = require('./models/user.js');
 var express = require('express');
-var router = express.Router();
+var router  = express.Router();
 
 // post SIGN UP data to web service
 router.post('/sign-up', (req, res) => {
   let userData = req.body;
   console.log(userData)
-  let user = new User(userData);
+  let user     = new User(userData);
 
   user.save((err, newUser) => {
     if(err) {

@@ -1,0 +1,70 @@
+<form class="example-form">
+
+  <!-- TASK TYPE -->
+  <mat-form-field>
+    <mat-select
+    class="example-full-width"
+      id="taskType"
+      name="taskType"
+      [(ngModel)]="taskData.taskType"
+      placeholder="Task Type">
+      <mat-option 
+        *ngFor="let taskType of taskTypes" 
+        [value]="taskType.value">
+        {{ taskType.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+
+  <!-- TASK PRIORITY -->
+  <mat-form-field>
+    <mat-select 
+      id="taskPriority"
+      name="taskPriority"
+      [(ngModel)]="taskData.taskPriority"
+      placeholder="Task Priority">
+      <mat-option 
+        *ngFor="let taskPriority of taskPriorities" 
+        [value]="taskPriority.value">
+        {{ taskPriority.viewValue }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+
+  <!-- TASK DUE DATE -->
+  <mat-form-field>
+    <input
+      id="taskDueDate"
+      name="taskDueDate"
+      [(ngModel)]="taskData.taskDueDate"
+      matInput 
+      [matDatepicker]="picker" 
+      placeholder="Task Due Date">
+    <mat-datepicker-toggle 
+      matSuffix 
+      [for]="picker">
+    </mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <br>
+
+  <!-- TASK DESCRIPTION -->
+  <mat-form-field>
+    <textarea 
+      id="taskDescription"
+      name="taskDescription"
+      [(ngModel)]="taskData.taskDescription"
+      matInput 
+      placeholder="Task Description">
+    </textarea>
+  </mat-form-field>
+  <br>
+  <!-- SUBMIT TASK -->
+  <button 
+    mat-button 
+    (click)="Task()">Submit
+  </button>
+
+</form>
