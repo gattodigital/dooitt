@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
 import { CookieService } from 'ngx-cookie-service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Injectable } from '@angular/core';
+
+@Injectable()
 
 @Component({
   selector: 'app-sign-in',
@@ -13,6 +16,10 @@ export class SignInComponent implements OnInit {
   // empty object to be filled by form data
   signInData = {};
 
+  TOKEN_KEY = 'token'
+  path      = 'http://localhost:3000';
+  authPath  ='http://localhost:3000/authorization';
+
   get authenticatedUser() {
     return !!localStorage.getItem(this.TOKEN_KEY);
   }
@@ -23,7 +30,7 @@ export class SignInComponent implements OnInit {
        console.log(res);
        localStorage.setItem('token', res.token);
        if(this.authenticatedUser){
-           this.route.navigateByUrl("/main")
+           this.router.navigate(["../main"]);
        }else{
          console.log("GET OUT!")
        }     
