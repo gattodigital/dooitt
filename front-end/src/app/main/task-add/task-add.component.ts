@@ -30,5 +30,7 @@ export class TaskAddComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    this.apiService.getTasks();
+    this.apiService.getTasks()
   }
+  
+}

@@ -16,12 +16,6 @@ import { ActivatedRoute } from '@angular/router';
       </mat-card-content>
     </mat-card>
     <hr>
-    <mat-card>
-      <mat-card-content>
-        <h3>Posts</h3>
-        <messages></messages>
-      </mat-card-content>
-    </mat-card>
     
     `,
 })

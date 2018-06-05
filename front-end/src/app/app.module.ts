@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from './api.service';
+import { CookieService } from 'ngx-cookie-service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, 
          MatCardModule, 
@@ -19,8 +20,6 @@ import { MatButtonModule,
 
 import { AuthInterceptorService } from './auth-interceptor.service';
 import { AppComponent } from './app.component';
-import { MessagesComponent } from './messages.component';
-import { PostComponent } from './post.component';
 import { UsersComponent } from './users.component';
 import { ProfileComponent } from './profile.component';
 import { HeaderComponent } from './header/header.component';
@@ -55,9 +54,7 @@ const routes: Routes = [
     PortalComponent,
     SignInComponent,
     SignUpComponent,
-    MessagesComponent,
     UsersComponent,
-    PostComponent,
     ProfileComponent,
     MainComponent,
     ConfirmComponent,
@@ -81,7 +78,8 @@ const routes: Routes = [
     MatNativeDateModule,
     BrowserAnimationsModule
   ],
-  providers: [ApiService, {
+  providers: [ApiService, 
+    CookieService,{
     provide: HTTP_INTERCEPTORS, 
     useClass: AuthInterceptorService,
     multi: true

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../environments/environment'
-
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable()
 
@@ -10,7 +10,8 @@ export class ApiService {
 
   constructor(
     private http: HttpClient, 
-    private route: Router
+    private route: Router,
+    private cookieService: CookieService
     ){}
 
   users     = []
@@ -80,15 +81,16 @@ export class ApiService {
 
   // POST Sign In to DB function
   postUserSignIn(signInData) {
-    this.http.post<any>(this.authPath + '/sign-in', signInData).subscribe( res => {
-      console.log(res);
-      localStorage.setItem('token', res.token);
-      if(this.authenticatedUser){
-          this.route.navigateByUrl("/main")
-      }else{
-        console.log("GET OUT!")
-      }     
-    });
+    return this.http.post<any>(this.authPath + '/sign-in', signInData);
+    // .subscribe( res => {
+    //   console.log(res);
+    //   localStorage.setItem('token', res.token);
+    //   if(this.authenticatedUser){
+    //       this.route.navigateByUrl("/main")
+    //   }else{
+    //     console.log("GET OUT!")
+    //   }     
+    // });
   }
 
 }
