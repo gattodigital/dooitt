@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../api.service';
+import { CookieService } from 'ngx-cookie-service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -8,7 +10,13 @@ import { ApiService } from '../api.service';
 })
 export class MainComponent implements OnInit {
 
-  // empty object to be filled by form data
+  constructor(
+    private apiService: ApiService, 
+    private route: ActivatedRoute, 
+    private cookieService: CookieService, 
+    private router: Router
+  ) { }
+
   taskData = {}
 
   Task() {
@@ -26,8 +34,6 @@ export class MainComponent implements OnInit {
     {value: 'medium-1', viewValue: 'Medium'},
     {value: 'low-2', viewValue: 'Low'}
   ];
-
-  constructor(private apiService: ApiService) { }
 
   ngOnInit() {
     this.apiService.getTasks();
