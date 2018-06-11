@@ -2,6 +2,12 @@ body {
   padding-top: 75px;
 }
 
+img.float-left {
+  max-width: 400px;
+  padding: 0 10px 10px 0;
+  clear: both;
+}
+
 @media (min-width: 992px) {
   body {
     padding-top: 77px;

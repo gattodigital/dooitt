@@ -1,30 +1,20 @@
 $( document ).ready(function() {
   
-  console.log('JS LOADED!');
+  console.log('JS LOADED, COWABUNGA!');
 
-  var newsAPI = 'https://newsapi.org/v2/top-headlines?' +
-            'country=us&' +
-            'apiKey=23ab87be631640c7a41a3e301b9686d6';
+  var apiKey = 'apiKey=23ab87be631640c7a41a3e301b9686d6';
 
-  var newsFeed = new Request(newsAPI);
+  var newsSources = 'https://newsapi.org/v2/sources?' +
+                   'language=en&' +
+                   'country=us&' +
+                   'category=technology&' + apiKey;
 
-  fetch(newsFeed)
-  .then(function(response) {
-      console.log(response.json());
-  });
+  var newsFeed =  'https://newsapi.org/v2/top-headlines?';
 
-  //
-
-  // Display data in HTML
   function displayData(dataPath, templatePath, renderLocation) {
-    if ( jQuery(renderLocation).length ) {
-      jQuery.ajax({ 
+      jQuery.ajax({
         url: dataPath,
-        data: "{}",
-        type: "GET",
-        dataType: "json",
-        async: true,
-        crossDomain: true,
+        data: '{}',
         success: function (data) {
           jQuery.get(templatePath, function (template) {
             var rendered = Handlebars.compile(template);
@@ -33,16 +23,82 @@ $( document ).ready(function() {
           });
         },
         error: function (xhr, status) {
-        /*Error*/
+          console.log('NOOO BUENOOO!')
         }
       });
     }
-  }
 
-  displayData(
-    newsAPI,
-    "index.html",
-    "#testNEWS"
-  );
+    // GET URL PARAMETERS
+    function getQueryVariable(variable)
+    {
+     var query = window.location.search.substring(1);
+     var vars = query.split("&");
+     for (var i=0;i<vars.length;i++) {
+             var pair = vars[i].split("=");
+             if(pair[0] == variable){return pair[1];}
+     }
+     return(false);
+    }
+
+    // NEWS SOURCES
+    displayData(
+      newsSources,
+      "views/news-source.html",
+      "#newsSource"
+    );
+
+    // NEWS FEEDS
+    displayData(
+      newsFeed + 'sources=ars-technica&' + apiKey,
+      "views/news-feed.html",
+      "#arstechnicaFeed"
+    );
+    displayData(
+      newsFeed + 'sources=crypto-coins-news&' + apiKey,
+      "views/news-feed.html",
+      "#cryptocoinsnewsFeed"
+    );
+    displayData(
+      newsFeed + 'sources=engadget&' + apiKey,
+      "views/news-feed.html",
+      "#engadgetFeed"
+    );
+    displayData(
+      newsFeed + 'sources=hacker-news&' + apiKey,
+      "views/news-feed.html",
+      "#hackernewsFeed"
+    );
+    displayData(
+      newsFeed + 'sources=recode&' + apiKey,
+      "views/news-feed.html",
+      "#recodeFeed"
+    );
+    displayData(
+      newsFeed + 'sources=techcrunch&' + apiKey,
+      "views/news-feed.html",
+      "#techcrunchFeed"
+    );
+    displayData(
+      newsFeed + 'sources=techradar&' + apiKey,
+      "views/news-feed.html",
+      "#techradarFeed"
+    );
+    displayData(
+      newsFeed + 'sources=the-next-web&' + apiKey,
+      "views/news-feed.html",
+      "#thenextwebFeed"
+    );
+    displayData(
+      newsFeed + 'sources=the-verge&' + apiKey,
+      "views/news-feed.html",
+      "#thevergeFeed"
+    );
+    displayData(
+      newsFeed + 'sources=wired&' + apiKey,
+      "views/news-feed.html",
+      "#wiredFeed"
+    );
+
+
 
 });
