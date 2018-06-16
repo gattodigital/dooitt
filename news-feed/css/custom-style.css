@@ -1,0 +1,23 @@
+body {
+  padding-top: 75px;
+}
+
+img.float-left {
+  width: 100%;
+  max-width: 400px;
+  padding: 0 10px 10px 0;
+  clear: both;
+}
+
+.back-to-top {
+	position: fixed;
+	bottom: 135px;
+	right: 15px;
+	font-size: 2rem;
+}
+
+@media (min-width: 992px) {
+  body {
+    padding-top: 77px;
+  }
+}

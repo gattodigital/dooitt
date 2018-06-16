@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>AR - News Feed</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+    <!-- Custom Stylesheet -->
+    <link href="css/custom-style.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <header id="header"></header>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <!-- Content Row -->
+      <div id="newsSource"></div>
+
+
+      <h3>ARS Technica</h3>
+      <div id="ars-technica"></div>
+
+      <hr>
+      
+      
+      <h3>Crypto Coin News</h3>      
+      <div id="crypto-coins-news"></div>
+
+      <hr>
+      
+      <h3>Engadget</h3>
+      <div id="engadget"></div>
+
+      <hr>
+      
+      <h3>Hacker News</h3>
+      <div id="hacker-news"></div>
+
+      <hr>
+      
+      <h3>Recode</h3>
+      <div id="recode"></div>
+
+      <hr>
+      
+      <h3>TechCrunch</h3>
+      <div id="techcrunch"></div>
+
+      <hr>
+      
+      <h3>TechRadar</h3>
+      <div id="techradar"></div>
+
+      <hr>
+      
+      <h3>The Next Web</h3>
+      <div id="the-next-web"></div>
+
+      <hr>
+      
+      <h3>The Verge</h3>
+      <div id="the-verge"></div>
+
+      <hr>
+      
+      <h3>Wired</h3>
+      <div id="wired"></div>
+
+
+    </div>
+    <!-- /.container -->
+
+    <div class="back-to-top">
+      <a href="#"><i class="fas fa-arrow-circle-up"></i></a>
+    </div>
+
+    <!-- Footer -->
+    <footer id="footer" class="py-5 bg-dark">
+      
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- Handlebars -->
+    <script src="js/handlebars.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="js/app.js"></script>
+    <!-- Ajax Header/Footer -->
+    <script>
+       $(document).ready(function () {
+           $('#header').load('views/header.html');
+           $('#footer').load('views/footer.html');
+       });
+    </script>
+
+  </body>
+
+</html>
