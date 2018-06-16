@@ -9,7 +9,7 @@
       <ul class="list-group">
         <li 
           class="list-group-item" 
-          *ngFor="let task of apiService.tasks | slice:0:4"
+          *ngFor="let task of apiService.tasks .slice(-6).reverse()"
           [routerLink]="['/main/task-details', task._id]">
           {{ task.taskDescription }}
         </li>
