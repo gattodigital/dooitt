@@ -23,64 +23,76 @@
 
   <body>
 
-    <header id="header"></header>
+
+    <header class="header">
+      <!-- views/header.html -->
+    </header>
 
     <!-- Page Content -->
     <div class="container">
 
-      <!-- Content Row -->
-      <div id="newsSource"></div>
+      <div id="main-row" class="row">
 
+        <div id ="sidebar" class="col-md-4">
+          
+          <div id="news-source">
+            <!-- views/news-source.html -->
+          </div>
+          <div id="googleSheet" class="list-group-item">
+            <h3>Leave a comment!</h3>
+            <form id="new-comment" action="">
+              <div class="form-group">
+                <label for="Name">Name: </label>
+                <input type="text" name="Name" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="Email">Email: </label>
+                <input type="text" name="Email" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="Comments">Comments: </label>
+                <input type="text" name="Comments" class="form-control">
+              </div>
+              <button type="submit" class="btn btn-primary">Send Data</button>
+            </form>
+            <!-- /#new-comment -->
+            <hr>
+            <div id="comments"></div>
+          </div>
+          <!-- /#googleSheet -->
+        </div>
+        <!-- /#sidebar -->
 
-      <h3>ARS Technica</h3>
-      <div id="ars-technica"></div>
+        <div id="content" class="col-md-8">
+          <h3>ARS Technica</h3>
+          <div id="ars-technica"></div>
+          <h3 class="mt-35">Crypto Coin News</h3>      
+          <div id="crypto-coins-news" class="header-clear"></div>
+          <h3 class="mt-35">Engadget</h3>
+          <div id="engadget" class="header-clear"></div>         
+          <h3 class="mt-35">Hacker News</h3>
+          <div id="hacker-news" class="header-clear"></div>          
+          <h3 class="mt-35">Recode</h3>
+          <div id="recode" class="header-clear"></div>         
+          <h3 class="mt-35">TechCrunch</h3>
+          <div id="techcrunch" class="header-clear"></div>         
+          <h3 class="mt-35">TechRadar</h3>
+          <div id="techradar" class="header-clear"></div>        
+          <h3 class="mt-35">The Next Web</h3>
+          <div id="the-next-web" class="header-clear"></div>        
+          <h3 class="mt-35">The Verge</h3>
+          <div id="the-verge" class="header-clear"></div>        
+          <h3 class="mt-35">Wired</h3>
+          <div id="wired" class="header-clear"></div>
+        </div>
+        <!-- /#content -->
 
-      <hr>
+      </div>
+      <!-- /#main-row -->
+
+      <hr><hr>
+
       
-      
-      <h3>Crypto Coin News</h3>      
-      <div id="crypto-coins-news"></div>
-
-      <hr>
-      
-      <h3>Engadget</h3>
-      <div id="engadget"></div>
-
-      <hr>
-      
-      <h3>Hacker News</h3>
-      <div id="hacker-news"></div>
-
-      <hr>
-      
-      <h3>Recode</h3>
-      <div id="recode"></div>
-
-      <hr>
-      
-      <h3>TechCrunch</h3>
-      <div id="techcrunch"></div>
-
-      <hr>
-      
-      <h3>TechRadar</h3>
-      <div id="techradar"></div>
-
-      <hr>
-      
-      <h3>The Next Web</h3>
-      <div id="the-next-web"></div>
-
-      <hr>
-      
-      <h3>The Verge</h3>
-      <div id="the-verge"></div>
-
-      <hr>
-      
-      <h3>Wired</h3>
-      <div id="wired"></div>
-
 
     </div>
     <!-- /.container -->
@@ -90,7 +102,7 @@
     </div>
 
     <!-- Footer -->
-    <footer id="footer" class="py-5 bg-dark">
+    <footer class="footer py-5 bg-dark">
       
     </footer>
 
@@ -107,8 +119,13 @@
     <!-- Ajax Header/Footer -->
     <script>
        $(document).ready(function () {
-           $('#header').load('views/header.html');
-           $('#footer').load('views/footer.html');
+           $('.header').load('views/header.html');
+           $('.footer').load('views/footer.html');
+
+           $("#menu-toggle").click(function(e) {
+              e.preventDefault();
+              $("#wrapper").toggleClass("toggled");
+           });
        });
     </script>
 

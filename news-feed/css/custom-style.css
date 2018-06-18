@@ -4,9 +4,17 @@ body {
 
 img.float-left {
   width: 100%;
-  max-width: 400px;
   padding: 0 10px 10px 0;
   clear: both;
+}
+
+.mt-35 {
+  margin-top: 35px;
+}
+
+.header-clear {
+  padding-top: 120px;
+  margin-top: -120px;
 }
 
 .back-to-top {

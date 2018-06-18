@@ -9,6 +9,10 @@ $( document ).ready(function() {
     return false;
   }); 
 
+  /* =================
+    NEWS FEED
+  ================= */ 
+
   var apiKey = 'apiKey=23ab87be631640c7a41a3e301b9686d6';
 
   var newsSources = 'https://newsapi.org/v2/sources?' +
@@ -19,14 +23,14 @@ $( document ).ready(function() {
   var newsFeed =  'https://newsapi.org/v2/top-headlines?';
 
   function displayData(dataPath, templatePath, renderLocation) {
-      jQuery.ajax({
+      $.ajax({
         url: dataPath,
         data: '{}',
         success: function (data) {
-          jQuery.get(templatePath, function (template) {
+          $.get(templatePath, function (template) {
             var rendered = Handlebars.compile(template);
             var result = rendered(data);
-            jQuery(renderLocation).html(result);
+            $(renderLocation).html(result);
           });
         },
         error: function (xhr, status) {
@@ -35,22 +39,11 @@ $( document ).ready(function() {
       });
     }
 
-    // function getQueryVariable(variable)
-    // {
-    //  var query = window.location.search.substring(1);
-    //  var vars = query.split("&");
-    //  for (var i=0;i<vars.length;i++) {
-    //          var pair = vars[i].split("=");
-    //          if(pair[0] == variable){return pair[1];}
-    //  }
-    //  return(false);
-    // }
-
     // NEWS SOURCES
     displayData(
       newsSources,
       "views/news-source.html",
-      "#newsSource"
+      "#news-source"
     );
 
     // NEWS FEEDS
@@ -105,4 +98,81 @@ $( document ).ready(function() {
       "#wired"
     );
 
-});
+    // displayData(
+    //   googleURL,
+    //   "views/google-output.html",
+    //   "#googleOutput"
+    // );
+
+    /* =================
+      GOOGLE SHEETS - COMMENTS
+    ================= */ 
+
+    var googleURL = 'https://script.google.com/macros/s/AKfycbz000oixle9FnkZFdWPnnyeOPeyatSRV-x2Y8yf2kAwM5rCyiA/exec';
+
+    $(function() {
+      $.getJSON(googleURL, function(data) {
+        var html = [];
+        $.each(data, function(key,val) {
+          for(var x = 0; x < val.length; x++) {
+            html += val[x] + '<br>'
+          }
+          html += '<hr>'
+        });
+        $("#comments").html(html);
+        console.log(html);
+      });
+      $("#new-comment").submit(function(e) {
+        e.preventDefault();
+        var formData = $("form#new-comment :input").serialize();
+        console.log(formData);
+        $.ajax({
+          url: googleURL,
+          method: 'POST',
+          data: formData,
+          success: function(data) {
+            console.log("success");
+          },
+        });
+      });
+    });
+
+
+
+}); // END document.ready
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
