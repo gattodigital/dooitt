@@ -5,8 +5,14 @@ var bodyParser    = require('body-parser');
 var mongoose      = require('mongoose');
 var rateLimit     = require('express-rate-limit');
 var authorization = require('./authorization');
+var rateLimit     = require('express-rate-limit');
 
 const port = process.env.PORT || 3000;
+
+const profileLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
 
 var User = require('./models/user.js');
 var Task = require('./models/task.js');
@@ -76,7 +82,7 @@ app.get('/users', async (req, res) => {
 });
 
 // get profiles end point
-app.get('/profile/:id', async (req, res) => {
+app.get('/profile/:id', profileLimiter, async (req, res) => {
   try {
     let user = await User.findById(req.params.id, '-password -__v');
     if (!user) {
