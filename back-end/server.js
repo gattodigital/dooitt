@@ -5,7 +5,6 @@ var bodyParser    = require('body-parser');
 var mongoose      = require('mongoose');
 var rateLimit     = require('express-rate-limit');
 var authorization = require('./authorization');
-var rateLimit     = require('express-rate-limit');
 
 const port = process.env.PORT || 3000;
 
