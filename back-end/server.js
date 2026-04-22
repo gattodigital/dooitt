@@ -3,6 +3,7 @@ var cors          = require('cors');
 var app           = express();
 var bodyParser    = require('body-parser');
 var mongoose      = require('mongoose');
+var rateLimit     = require('express-rate-limit');
 var authorization = require('./authorization');
 
 const port = process.env.PORT || 3000;
@@ -16,6 +17,15 @@ var corsOptions = corsOrigin
   : {};
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+app.use(['/tasks', '/tasks/:id', '/users', '/profile/:id'], apiLimiter);
 
 // post tasks to database
 app.post('/tasks', async (req, res) => {
