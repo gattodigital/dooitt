@@ -1,22 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { environment } from '../environments/environment'
-import { CookieService } from 'ngx-cookie-service';
+import { environment } from '../environments/environment';
 
 @Injectable()
-
 export class ApiService {
 
-  constructor(
-    private http: HttpClient, 
-    private route: Router,
-    private cookieService: CookieService
-  ) { }
+  constructor(private http: HttpClient) { }
 
-  users     = []
-  tasks     = []
-  TOKEN_KEY = 'token'
+  users     = [];
+  tasks     = [];
+  TOKEN_KEY = 'token';
   path      = environment.apiUrl;
   authPath  = environment.apiUrl + '/authorization';
 
@@ -35,16 +28,16 @@ export class ApiService {
     return !!localStorage.getItem(this.TOKEN_KEY);
   }
 
-  // POST tasks to backend
+  // POST tasks to backend then refresh list
   postTask(task) {
-    this.http.post<any>(this.path + '/tasks', task).subscribe( res => {
-      this.tasks = res;
+    this.http.post<any>(this.path + '/tasks', task).subscribe(() => {
+      this.getTasks();
     });
   }
 
   // GET tasks from backend
   getTasks() {
-    this.http.get<any>(this.path + '/tasks').subscribe( res => {
+    this.http.get<any>(this.path + '/tasks').subscribe(res => {
       this.tasks = res;
     });
   }
@@ -56,7 +49,7 @@ export class ApiService {
 
   // GET users from backend
   getUsers() {
-    this.http.get<any>(this.path + '/users').subscribe( res => {
+    this.http.get<any>(this.path + '/users').subscribe(res => {
       this.users = res;
     });
   }
