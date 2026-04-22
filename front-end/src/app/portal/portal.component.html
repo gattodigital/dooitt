@@ -1,22 +1,82 @@
-<div id="portal">
+<section class="hero" *ngIf="!apiService.authenticatedUser">
 
-  <button 
-    mat-raised-button
-    id="signInButton"
-    class="action-button"
-    *ngIf="!apiService.authenticatedUser"
-    routerLink="/sign-in">Sign In
-  </button>
+  <div class="hero-glow hero-glow--blue"></div>
+  <div class="hero-glow hero-glow--purple"></div>
 
-  <button 
-    mat-raised-button
-    id="signUpButton"
-    class="action-button"
-    *ngIf="!apiService.authenticatedUser"
-    routerLink="/sign-up">Sign Up
-  </button>
+  <div class="hero-content">
 
-</div>
-<!-- /#portal -->
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Task Intelligence Platform
+    </div>
 
+    <h1 class="hero-title">
+      Get Things Done.<br>
+      <span class="gradient-text">Intelligently.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Dooitt is your modern task manager designed for people who move fast.
+      Organize, prioritize, and execute with clarity.
+    </p>
+
+    <div class="hero-actions">
+      <a routerLink="/sign-up" class="btn-hero-primary">
+        Start for Free
+        <span class="btn-arrow">→</span>
+      </a>
+      <a routerLink="/sign-in" class="btn-hero-secondary">
+        Sign In
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-value">∞</span>
+        <span class="stat-label">Tasks</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-value">100%</span>
+        <span class="stat-label">Free</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-value">24/7</span>
+        <span class="stat-label">Access</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Feature cards -->
+  <div class="feature-grid">
+
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Lightning Fast</h3>
+      <p>Add and manage tasks in seconds. Zero friction, maximum productivity.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>Smart Priority</h3>
+      <p>Set priority levels and never miss what matters most again.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <h3>Due Dates</h3>
+      <p>Track deadlines with a built-in date picker and stay on schedule.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔐</div>
+      <h3>Secure Auth</h3>
+      <p>JWT-based authentication keeps your data private and protected.</p>
+    </div>
+
+  </div>
+
+</section>
 

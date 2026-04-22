@@ -1,20 +1,47 @@
-<h2>Task Details</h2>
+<div class="details-page">
 
-<hr>
+  <a routerLink="/main" class="back-link">
+    ← Back to Dashboard
+  </a>
 
-<h4>{{ taskDetails?.taskDescription }}</h4>
+  <div class="details-card glass-card" *ngIf="taskDetails">
 
-<ul class="list-group">
-  <li 
-    class="list-group-item" >
-    Due date: {{ taskDetails?.taskDueDate }}
-  </li>
-  <li 
-    class="list-group-item" >
-    Priority: {{ taskDetails?.taskPriority }}
-  </li>
-  <li 
-    class="list-group-item" >
-    Type: {{ taskDetails?.taskType }}
-  </li>
-</ul>
+    <div class="details-header">
+      <div class="details-icon">📋</div>
+      <h2 class="details-title">{{ taskDetails?.taskDescription }}</h2>
+    </div>
+
+    <div class="details-badges">
+      <span class="badge badge--priority"
+        [class.high]="taskDetails?.taskPriority === 'high-0'"
+        [class.medium]="taskDetails?.taskPriority === 'medium-1'"
+        [class.low]="taskDetails?.taskPriority === 'low-2'">
+        {{ taskDetails?.taskPriority === 'high-0' ? '🔴 High Priority'
+         : taskDetails?.taskPriority === 'medium-1' ? '🟡 Medium Priority'
+         : '🟢 Low Priority' }}
+      </span>
+
+      <span class="badge badge--type">
+        {{ taskDetails?.taskType === 'personal-0' ? '👤 Personal'
+         : taskDetails?.taskType === 'business-1' ? '💼 Business'
+         : '📦 Other' }}
+      </span>
+    </div>
+
+    <div class="details-meta">
+      <div class="meta-item">
+        <span class="meta-label">Due Date</span>
+        <span class="meta-value">
+          {{ taskDetails?.taskDueDate ? (taskDetails?.taskDueDate | date:'MMMM d, y') : 'No due date' }}
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="loading-state" *ngIf="!taskDetails">
+    <div class="loading-spinner"></div>
+    <p>Loading task details...</p>
+  </div>
+
+</div>

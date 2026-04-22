@@ -1,25 +1,42 @@
-<mat-toolbar>
-  
-  <div class="app-logo">
-    <a routerLink="/">
-      <img src="../assets/ar_logo_blk.png" alt="Andres Ramirez, logo">
+<header class="site-header">
+  <div class="header-inner">
+
+    <a routerLink="/" class="brand">
+      <span class="brand-icon">✦</span>
+      <span class="brand-name">Dooitt</span>
     </a>
+
+    <nav class="header-nav">
+      <a
+        *ngIf="apiService.authenticatedUser"
+        routerLink="/main"
+        class="nav-link"
+        routerLinkActive="active">
+        Dashboard
+      </a>
+
+      <button
+        *ngIf="apiService.authenticatedUser"
+        class="btn-logout"
+        (click)="apiService.logOut()"
+        routerLink="/">
+        Log Out
+      </button>
+
+      <a
+        *ngIf="!apiService.authenticatedUser"
+        routerLink="/sign-in"
+        class="nav-link">
+        Sign In
+      </a>
+
+      <a
+        *ngIf="!apiService.authenticatedUser"
+        routerLink="/sign-up"
+        class="btn-cta">
+        Get Started
+      </a>
+    </nav>
+
   </div>
-  
-<!--   <button 
-    mat-button routerLink="/users">Users
-  </button>
-
-  <button 
-    mat-button routerLink="/post">Post
-  </button> -->
-
-  <button 
-    id="logOutButton"
-    mat-button 
-    *ngIf="apiService.authenticatedUser"
-    (click)="apiService.logOut()"
-    routerLink="/">Log Out
-  </button>
-
-</mat-toolbar>
+</header>

@@ -1,27 +1,59 @@
-<h1>Let's Doo Itt!</h1>
+<div class="dashboard">
 
-<hr>
+  <!-- Page Title -->
+  <div class="dashboard-header">
+    <div>
+      <h1 class="dashboard-title">
+        <span class="gradient-text">My Dashboard</span>
+      </h1>
+      <p class="dashboard-sub">Manage your tasks and stay on top of priorities.</p>
+    </div>
+    <div class="task-count-badge">
+      <span>{{ apiService.tasks?.length || 0 }}</span>
+      <span class="badge-label">tasks</span>
+    </div>
+  </div>
 
-<div class="row">
-  
-  <div class="col-sm-6">
-    <h3>Top Priority</h3>
-      <ul class="list-group">
-        <li 
-          class="list-group-item" 
-          *ngFor="let task of apiService.tasks .slice(-6).reverse()"
+  <div class="dashboard-grid">
+
+    <!-- Task List -->
+    <div class="panel glass-card">
+      <div class="panel-header">
+        <h3>⚡ Top Priority</h3>
+        <span class="panel-chip">Latest 6</span>
+      </div>
+      <ul class="task-list">
+        <li
+          class="task-item"
+          *ngFor="let task of apiService.tasks?.slice(-6).reverse()"
           [routerLink]="['/main/task-details', task._id]">
-          {{ task.taskDescription }}
+          <span class="task-priority-dot"
+            [class.high]="task.taskPriority === 'high-0'"
+            [class.medium]="task.taskPriority === 'medium-1'"
+            [class.low]="task.taskPriority === 'low-2'">
+          </span>
+          <div class="task-info">
+            <span class="task-desc">{{ task.taskDescription }}</span>
+            <span class="task-meta" *ngIf="task.taskDueDate">
+              {{ task.taskDueDate | date:'MMM d, y' }}
+            </span>
+          </div>
+          <span class="task-arrow">›</span>
         </li>
       </ul>
-  </div>
+      <p class="empty-state" *ngIf="!apiService.tasks?.length">
+        No tasks yet. Add one to get started! 🎯
+      </p>
+    </div>
 
-  <div class="col-sm-6">
-    <h3>Add Task</h3>
-      <app-task-add></app-task-add> 
-  </div>
-  <div class="col-sm-12">
-    <h3>My Calendar</h3>
+    <!-- Add Task -->
+    <div class="panel glass-card">
+      <div class="panel-header">
+        <h3>✏️ Add Task</h3>
+      </div>
+      <app-task-add></app-task-add>
+    </div>
+
   </div>
 
 </div>

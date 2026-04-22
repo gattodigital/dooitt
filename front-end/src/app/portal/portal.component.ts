@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-portal',
@@ -7,11 +8,14 @@ import { ApiService } from '../api.service';
   styleUrls: ['./portal.component.css']
 })
 
-export class PortalComponent {
+export class PortalComponent implements OnInit {
 
+  constructor(public apiService: ApiService, private router: Router) { }
 
-  constructor(private apiService: ApiService) { 
-    
+  ngOnInit() {
+    if (this.apiService.authenticatedUser) {
+      this.router.navigate(['/main']);
+    }
   }
 
 }

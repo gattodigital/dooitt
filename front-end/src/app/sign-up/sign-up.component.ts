@@ -21,7 +21,7 @@ export class SignUpComponent implements OnInit {
     private router: Router
   ) { }
 
-  signUpData = {};
+  signUpData: any = {};
 
   TOKEN_KEY = 'token'
   path      = 'http://localhost:3000';

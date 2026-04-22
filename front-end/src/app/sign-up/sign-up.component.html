@@ -1,55 +1,74 @@
-<div id="signUp">
-  
-  <h3>Sign Up</h3>
+<div class="auth-page">
 
-  <form class="example-form">
+  <div class="auth-card glass-card">
 
-    <mat-form-field class="example-full-width">
-      <input 
-        [(ngModel)]="signUpData.email"
-        matInput placeholder="E-mail" 
-        type="email"
-        name="email">
-    </mat-form-field>
+    <div class="auth-header">
+      <div class="auth-icon">🚀</div>
+      <h2>Create account</h2>
+      <p>Start managing tasks in seconds</p>
+    </div>
 
-    <br>
+    <form class="auth-form">
 
-    <mat-form-field class="example-full-width">
-      <input 
-        [(ngModel)]="signUpData.password"
-        matInput placeholder="Password" 
-        type="password"
-        name="password">
-    </mat-form-field>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input
+            class="form-input"
+            [(ngModel)]="signUpData.firstName"
+            type="text"
+            name="firstName"
+            placeholder="Jane"
+            autocomplete="given-name">
+        </div>
 
-    <br>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input
+            class="form-input"
+            [(ngModel)]="signUpData.lastName"
+            type="text"
+            name="lastName"
+            placeholder="Doe"
+            autocomplete="family-name">
+        </div>
+      </div>
 
-    <mat-form-field class="example-full-width">
-      <input 
-        [(ngModel)]="signUpData.firstName"
-        matInput placeholder="First Name" 
-        type="text"
-        name="firstName">
-    </mat-form-field>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input
+          class="form-input"
+          [(ngModel)]="signUpData.email"
+          type="email"
+          name="email"
+          placeholder="you@example.com"
+          autocomplete="email">
+      </div>
 
-    <br>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input
+          class="form-input"
+          [(ngModel)]="signUpData.password"
+          type="password"
+          name="password"
+          placeholder="Create a strong password"
+          autocomplete="new-password">
+      </div>
 
-    <mat-form-field class="example-full-width">
-      <input 
-        [(ngModel)]="signUpData.lastName"
-        matInput placeholder="Last Name" 
-        type="text"
-        name="lastName">
-    </mat-form-field>
+      <button class="btn-submit" type="button" (click)="Post()">
+        Create Account
+        <span class="btn-arrow">→</span>
+      </button>
 
-    <br>
+    </form>
 
-    <button 
-      mat-button 
-      (click)="Post()"> Sign Up 
-    </button>
+    <p class="auth-footer-text">
+      Already have an account?
+      <a routerLink="/sign-in" class="auth-link">Sign in →</a>
+    </p>
 
-  </form>
+  </div>
 
 </div>
 

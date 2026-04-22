@@ -9,7 +9,7 @@ import { ApiService } from 'src/app/api.service';
 export class TaskAddComponent implements OnInit {
 
   // empty object to be filled by form data
-  taskData = {}
+  taskData: any = {}
 
   Task() {
     this.apiService.postTask(this.taskData);
