@@ -46,6 +46,16 @@
   gap: 20px;
 }
 
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #ef4444;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -105,6 +115,12 @@
 .btn-submit:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 30px rgba(0, 212, 255, 0.5);
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .btn-arrow {
