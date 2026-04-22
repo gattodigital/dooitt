@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class MainComponent implements OnInit {
 
   constructor(
-    private apiService: ApiService, 
+    public apiService: ApiService, 
     private route: ActivatedRoute, 
     private cookieService: CookieService, 
     private router: Router

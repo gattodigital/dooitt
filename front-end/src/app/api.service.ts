@@ -17,8 +17,8 @@ export class ApiService {
   users     = []
   tasks     = []
   TOKEN_KEY = 'token'
-  path      = 'http://localhost:3000';
-  authPath  ='http://localhost:3000/authorization';
+  path      = environment.apiUrl;
+  authPath  = environment.apiUrl + '/authorization';
 
   // POST Sign Up to DB function
   postUserSignUp(signUpData) {

@@ -1,49 +1,196 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import url('//fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet');
-/* You can add global styles to this file, and also import other style files */
 
-/* Sticky footer styles
--------------------------------------------------- */
+/* ===================================
+   DESIGN TOKENS — HIGH-TECH DARK
+=================================== */
+:root {
+  --bg-base:        #050510;
+  --bg-surface:     #0c0c20;
+  --bg-card:        rgba(255, 255, 255, 0.04);
+  --bg-card-hover:  rgba(255, 255, 255, 0.08);
+
+  --accent-blue:    #00d4ff;
+  --accent-purple:  #7c3aed;
+  --accent-green:   #00ff9d;
+  --accent-pink:    #f059da;
+
+  --text-primary:   #e8eaf6;
+  --text-secondary: #8892b0;
+  --text-muted:     #4a5568;
+
+  --border:         rgba(0, 212, 255, 0.15);
+  --border-hover:   rgba(0, 212, 255, 0.4);
+
+  --glow-blue:      0 0 20px rgba(0, 212, 255, 0.3);
+  --glow-purple:    0 0 20px rgba(124, 58, 237, 0.4);
+  --glow-green:     0 0 20px rgba(0, 255, 157, 0.3);
+
+  --radius:         12px;
+  --radius-lg:      20px;
+  --transition:     0.25s ease;
+
+  --font-body:      'Inter', sans-serif;
+  --font-display:   'Space Grotesk', sans-serif;
+}
+
+/* ===================================
+   RESET & BASE
+=================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html {
   position: relative;
   min-height: 100%;
+  scroll-behavior: smooth;
 }
+
 body {
-  /* Margin bottom by footer height */
-  padding: 0; 
-  margin: 0 0 60px 0;
-  font-family: Roboto, sans-serif;
+  margin: 0 0 60px;
+  padding: 0;
+  font-family: var(--font-body);
   font-size: 16px;
   font-weight: 400;
-  background-color: #eee;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(124, 58, 237, 0.18) 0%, transparent 60%),
+    linear-gradient(180deg, #050510 0%, #07071a 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
 }
+
+/* Subtle grid overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===================================
+   LAYOUT
+=================================== */
 .container-fluid {
-  padding-left: 0!important;
-  padding-right: 0!important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  position: relative;
+  z-index: 1;
 }
+
 .container {
   max-width: 1200px;
   margin: auto;
+  padding: 0 24px;
 }
+
+/* ===================================
+   TYPOGRAPHY
+=================================== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  margin-top: 0;
+}
+
+/* ===================================
+   GLASS CARD
+=================================== */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.glass-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--glow-blue);
+}
+
+/* ===================================
+   BUTTONS
+=================================== */
+button.action-button {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: block;
+  margin: 12px auto;
+  max-width: 340px;
+  width: 100%;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: all var(--transition);
+}
+
+button.action-button.primary {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.35);
+}
+
+button.action-button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 212, 255, 0.5);
+}
+
+button.action-button.secondary {
+  background: transparent;
+  color: var(--accent-blue);
+  border: 1.5px solid var(--accent-blue);
+}
+
+button.action-button.secondary:hover {
+  background: rgba(0, 212, 255, 0.08);
+  box-shadow: var(--glow-blue);
+  transform: translateY(-2px);
+}
+
+/* Angular Material overrides */
+.mat-button,
+.mat-raised-button {
+  font-family: var(--font-body) !important;
+  letter-spacing: 0.04em;
+}
+
+.mat-raised-button.mat-primary {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)) !important;
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.35) !important;
+  color: #fff !important;
+  border-radius: 50px !important;
+  padding: 0 28px !important;
+  height: 44px;
+  font-weight: 600 !important;
+}
+
+/* ===================================
+   FOOTER
+=================================== */
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
-  text-align: center;
-  /* Set the fixed height of the footer here */
   height: 60px;
-  line-height: 60px; /* Vertically center the text there */
-  color: #ccc;
-  background-color: #444;
-}
-
-
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
-
-body > .container {
-  padding: 60px 15px 0;
+  line-height: 60px;
+  text-align: center;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  z-index: 10;
 }
 
 .footer > .container {
@@ -51,18 +198,55 @@ body > .container {
   padding-left: 15px;
 }
 
-/* BUTTONS */
-
-button.action-button {
-  font-size: 0.9rem;
-  display: block;
-  margin: 15px auto;
-  max-width: 300px;
-  width: 100%;
+/* ===================================
+   MATERIAL FORM FIELDS — DARK OVERRIDE
+=================================== */
+.mat-form-field-appearance-legacy .mat-form-field-label,
+.mat-form-field-label {
+  color: var(--text-secondary) !important;
 }
 
-/* CARDS */
-.card-portal {
-  height: 400px;
-  align-self: center;
+.mat-form-field-appearance-legacy .mat-form-field-underline {
+  background-color: var(--border) !important;
+}
+
+.mat-form-field-appearance-legacy.mat-focused .mat-form-field-underline {
+  background-color: var(--accent-blue) !important;
+}
+
+.mat-input-element {
+  color: var(--text-primary) !important;
+  caret-color: var(--accent-blue) !important;
+}
+
+.mat-select-value {
+  color: var(--text-primary) !important;
+}
+
+.mat-select-arrow {
+  color: var(--accent-blue) !important;
+}
+
+.mat-option {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+}
+
+.mat-option:hover,
+.mat-option.mat-active {
+  background: rgba(0, 212, 255, 0.1) !important;
+}
+
+/* ===================================
+   SCROLLBAR
+=================================== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-purple);
+  border-radius: 3px;
 }

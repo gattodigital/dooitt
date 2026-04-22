@@ -21,7 +21,7 @@ export class SignInComponent implements OnInit {
     private router: Router
   ) { }
 
-  signInData = {};
+  signInData: any = {};
 
   TOKEN_KEY = 'token'
   path      = 'http://localhost:3000';
