@@ -4,9 +4,12 @@
 /dist
 /tmp
 /out-tsc
+front-end/dist/
 
 # dependencies
 /node_modules
+back-end/node_modules/
+front-end/node_modules/
 
 # environment files
 .env

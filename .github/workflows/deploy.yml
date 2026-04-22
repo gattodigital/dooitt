@@ -30,13 +30,15 @@ jobs:
         env:
           API_URL: ${{ secrets.API_URL }}
         run: |
-          if [ -n "$API_URL" ]; then
-            sed -i "s|__API_URL__|$API_URL|g" src/environments/environment.prod.ts
+          if [ -z "$API_URL" ]; then
+            echo "::error::API_URL secret is not set. Add it in Settings → Secrets → Actions before deploying." >&2
+            exit 1
           fi
+          sed -i "s|__API_URL__|$API_URL|g" src/environments/environment.prod.ts
 
       - name: Build
         working-directory: front-end
-        run: npx ng build --prod --base-href /dooitt/
+        run: npx ng build --prod
 
       - name: Copy index.html to 404.html (SPA routing fix)
         run: cp front-end/dist/dooitt/index.html front-end/dist/dooitt/404.html
