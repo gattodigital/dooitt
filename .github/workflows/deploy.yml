@@ -27,8 +27,6 @@ jobs:
 
       - name: Build
         working-directory: front-end
-        env:
-          NODE_OPTIONS: --openssl-legacy-provider
         run: npx ng build --prod --base-href /dooitt/
 
       - name: Copy index.html to 404.html (SPA routing fix)
