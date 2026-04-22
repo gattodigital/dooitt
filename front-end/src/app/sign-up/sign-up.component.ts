@@ -16,23 +16,61 @@ export class SignUpComponent implements OnInit {
   ) { }
 
   signUpData: any = {};
+  confirmPassword = '';
+  errorMessage = '';
+  isLoading = false;
 
-  TOKEN_KEY = 'token';
+  // Client-side validation; returns an error message or empty string
+  validate(): string {
+    const { email, password, firstName, lastName } = this.signUpData;
 
-  get authenticatedUser() {
-    return !!localStorage.getItem(this.TOKEN_KEY);
+    if (!firstName || !firstName.trim()) {
+      return 'First name is required.';
+    }
+    if (!lastName || !lastName.trim()) {
+      return 'Last name is required.';
+    }
+    if (!email || !email.trim()) {
+      return 'Email is required.';
+    }
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRe.test(email.trim())) {
+      return 'Please enter a valid email address.';
+    }
+    if (!password) {
+      return 'Password is required.';
+    }
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters long.';
+    }
+    if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+      return 'Password must contain at least one letter and one number.';
+    }
+    if (password !== this.confirmPassword) {
+      return 'Passwords do not match.';
+    }
+    return '';
   }
 
   Post() {
+    this.errorMessage = '';
+    const validationError = this.validate();
+    if (validationError) {
+      this.errorMessage = validationError;
+      return;
+    }
+
+    this.isLoading = true;
     this.apiService.postUserSignUp(this.signUpData).subscribe(
       res => {
+        this.isLoading = false;
         localStorage.setItem('token', res.token);
-        if (this.authenticatedUser) {
-          this.router.navigate(['/sign-up/confirm']);
-        }
+        this.router.navigate(['/sign-up/confirm']);
       },
-      () => {
-        console.error('Registration failed. Please try again.');
+      err => {
+        this.isLoading = false;
+        const msg = err && err.error && err.error.message;
+        this.errorMessage = msg || 'Registration failed. Please try again.';
       }
     );
   }

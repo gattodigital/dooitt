@@ -8,33 +8,41 @@
       <p>Sign in to your Dooitt account</p>
     </div>
 
-    <form class="auth-form">
+    <form class="auth-form" (ngSubmit)="Post()" #signInForm="ngForm" novalidate>
+
+      <div *ngIf="errorMessage" class="alert-error" role="alert">
+        {{ errorMessage }}
+      </div>
 
       <div class="form-group">
-        <label class="form-label">Email</label>
+        <label class="form-label" for="email">Email</label>
         <input
+          id="email"
           class="form-input"
           [(ngModel)]="signInData.email"
           type="email"
           name="email"
           placeholder="you@example.com"
-          autocomplete="email">
+          autocomplete="email"
+          required>
       </div>
 
       <div class="form-group">
-        <label class="form-label">Password</label>
+        <label class="form-label" for="password">Password</label>
         <input
+          id="password"
           class="form-input"
           [(ngModel)]="signInData.password"
           type="password"
           name="password"
           placeholder="••••••••"
-          autocomplete="current-password">
+          autocomplete="current-password"
+          required>
       </div>
 
-      <button class="btn-submit" type="button" (click)="Post()">
-        Sign In
-        <span class="btn-arrow">→</span>
+      <button class="btn-submit" type="submit" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Sign In <span class="btn-arrow">→</span></span>
+        <span *ngIf="isLoading">Signing in…</span>
       </button>
 
     </form>

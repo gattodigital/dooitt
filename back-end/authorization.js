@@ -1,15 +1,20 @@
-var bcrypt      = require('bcrypt-nodejs');
-var jwt         = require('jwt-simple');
-var rateLimit   = require('express-rate-limit');
-var User        = require('./models/user.js');
-var express     = require('express');
-var router      = express.Router();
+var bcrypt    = require('bcryptjs');
+var jwt       = require('jsonwebtoken');
+var rateLimit = require('express-rate-limit');
+var User      = require('./models/user.js');
+var express   = require('express');
+var router    = express.Router();
 
 var JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
   console.error('FATAL: JWT_SECRET environment variable is not set.');
   process.exit(1);
 }
+
+var JWT_EXPIRY = process.env.JWT_EXPIRY || '8h';
+
+// Simple email regex for server-side validation
+var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 var authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -30,12 +35,26 @@ router.post('/sign-up', async (req, res) => {
       return res.status(400).send({ message: 'Invalid input.' });
     }
 
+    email = email.trim().toLowerCase();
+
     if (!email || !password) {
       return res.status(400).send({ message: 'Email and password are required.' });
     }
 
+    if (!EMAIL_RE.test(email)) {
+      return res.status(400).send({ message: 'Please enter a valid email address.' });
+    }
+
+    // Password strength: min 8 chars, at least one letter and one number
+    if (password.length < 8) {
+      return res.status(400).send({ message: 'Password must be at least 8 characters long.' });
+    }
+    if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+      return res.status(400).send({ message: 'Password must contain at least one letter and one number.' });
+    }
+
     // Check for duplicate email
-    let existing = await User.findOne({ email: String(email) });
+    let existing = await User.findOne({ email });
     if (existing) {
       return res.status(409).send({ message: 'An account with this email already exists.' });
     }
@@ -43,7 +62,7 @@ router.post('/sign-up', async (req, res) => {
     let user = new User({ email, password, firstName, lastName });
     let newUser = await user.save();
     let payload = { sub: newUser._id };
-    let token = jwt.encode(payload, JWT_SECRET);
+    let token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY });
     res.status(200).send({ token });
   } catch (err) {
     console.error('Sign-up error:', err);
@@ -61,28 +80,26 @@ router.post('/sign-in', async (req, res) => {
       return res.status(400).send({ message: 'Invalid input.' });
     }
 
+    email = email.trim().toLowerCase();
+
     if (!email || !password) {
       return res.status(400).send({ message: 'Email and password are required.' });
     }
 
-    let user = await User.findOne({ email: String(email) });
+    let user = await User.findOne({ email });
 
     if (!user) {
       return res.status(401).send({ message: 'Invalid email or password.' });
     }
 
-    bcrypt.compare(password, user.password, (err, isMatch) => {
-      if (err) {
-        console.error('bcrypt error:', err);
-        return res.status(500).send({ message: 'Internal server error.' });
-      }
-      if (!isMatch) {
-        return res.status(401).send({ message: 'Invalid email or password.' });
-      }
-      let payload = { sub: user._id };
-      let token = jwt.encode(payload, JWT_SECRET);
-      res.status(200).send({ token });
-    });
+    let isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).send({ message: 'Invalid email or password.' });
+    }
+
+    let payload = { sub: user._id };
+    let token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY });
+    res.status(200).send({ token });
   } catch (err) {
     console.error('Sign-in error:', err);
     res.status(500).send({ message: 'Internal server error.' });

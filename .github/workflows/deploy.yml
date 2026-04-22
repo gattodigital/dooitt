@@ -17,13 +17,13 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          node-version: '18'
           cache: 'npm'
           cache-dependency-path: front-end/package-lock.json
 
       - name: Install dependencies
         working-directory: front-end
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Set API URL
         working-directory: front-end
@@ -38,6 +38,8 @@ jobs:
 
       - name: Build
         working-directory: front-end
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
         run: npx ng build --prod
 
       - name: Copy index.html to 404.html (SPA routing fix)

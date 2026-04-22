@@ -16,23 +16,44 @@ export class SignInComponent implements OnInit {
   ) { }
 
   signInData: any = {};
+  errorMessage = '';
+  isLoading = false;
 
-  TOKEN_KEY = 'token';
-
-  get authenticatedUser() {
-    return !!localStorage.getItem(this.TOKEN_KEY);
+  // Simple client-side validation; returns an error message or empty string
+  validate(): string {
+    const { email, password } = this.signInData;
+    if (!email || !email.trim()) {
+      return 'Email is required.';
+    }
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRe.test(email.trim())) {
+      return 'Please enter a valid email address.';
+    }
+    if (!password) {
+      return 'Password is required.';
+    }
+    return '';
   }
 
   Post() {
+    this.errorMessage = '';
+    const validationError = this.validate();
+    if (validationError) {
+      this.errorMessage = validationError;
+      return;
+    }
+
+    this.isLoading = true;
     this.apiService.postUserSignIn(this.signInData).subscribe(
       res => {
+        this.isLoading = false;
         localStorage.setItem('token', res.token);
-        if (this.authenticatedUser) {
-          this.router.navigate(['/main']);
-        }
+        this.router.navigate(['/main']);
       },
-      () => {
-        console.error('Sign-in failed. Please check your credentials.');
+      err => {
+        this.isLoading = false;
+        const msg = err && err.error && err.error.message;
+        this.errorMessage = msg || 'Sign-in failed. Please check your credentials.';
       }
     );
   }
