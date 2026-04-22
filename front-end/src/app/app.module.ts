@@ -42,8 +42,8 @@ const routes: Routes = [
   { path: 'users', component: UsersComponent },
   { path: 'main', component: MainComponent },
   { path: 'main/task-details/:id', component: TaskDetailsComponent },
-  { path: 'profile/:id', component: ProfileComponent }
-
+  { path: 'profile/:id', component: ProfileComponent },
+  { path: '**', redirectTo: '/portal' }
 ];
 
 @NgModule({
