@@ -68,18 +68,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "dooitt:build"
+            "buildTarget": "dooitt:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "dooitt:build:production"
+              "buildTarget": "dooitt:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "dooitt:build"
+            "buildTarget": "dooitt:build"
           }
         },
         "test": {
