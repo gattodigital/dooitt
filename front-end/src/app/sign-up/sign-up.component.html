@@ -10,6 +10,10 @@
 
     <form class="auth-form">
 
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">First Name</label>
@@ -19,7 +23,8 @@
             type="text"
             name="firstName"
             placeholder="Jane"
-            autocomplete="given-name">
+            autocomplete="given-name"
+            [disabled]="isLoading">
         </div>
 
         <div class="form-group">
@@ -30,7 +35,8 @@
             type="text"
             name="lastName"
             placeholder="Doe"
-            autocomplete="family-name">
+            autocomplete="family-name"
+            [disabled]="isLoading">
         </div>
       </div>
 
@@ -42,7 +48,8 @@
           type="email"
           name="email"
           placeholder="you@example.com"
-          autocomplete="email">
+          autocomplete="email"
+          [disabled]="isLoading">
       </div>
 
       <div class="form-group">
@@ -52,29 +59,16 @@
           [(ngModel)]="signUpData.password"
           type="password"
           name="password"
-          placeholder="Create a strong password (8+ chars)"
-          autocomplete="new-password">
-        <small class="form-hint">Must be 8+ characters with uppercase, lowercase, and number</small>
+          placeholder="Create a strong password"
+          autocomplete="new-password"
+          [disabled]="isLoading">
+        <small class="form-hint">Min 8 chars with uppercase, lowercase, number & special character</small>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Confirm Password</label>
-        <input
-          class="form-input"
-          [(ngModel)]="confirmPassword"
-          type="password"
-          name="confirmPassword"
-          placeholder="Re-enter your password"
-          autocomplete="new-password">
-      </div>
-
-      <div *ngIf="errorMessage" class="error-message">
-        {{ errorMessage }}
-      </div>
-
-      <button class="btn-submit" type="button" (click)="Post()">
-        Create Account
-        <span class="btn-arrow">→</span>
+      <button class="btn-submit" type="button" (click)="Post()" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Create Account</span>
+        <span *ngIf="isLoading">Creating account...</span>
+        <span class="btn-arrow" *ngIf="!isLoading">→</span>
       </button>
 
     </form>

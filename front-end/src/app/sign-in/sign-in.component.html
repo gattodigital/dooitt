@@ -10,6 +10,10 @@
 
     <form class="auth-form">
 
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
       <div class="form-group">
         <label class="form-label">Email</label>
         <input
@@ -18,7 +22,8 @@
           type="email"
           name="email"
           placeholder="you@example.com"
-          autocomplete="email">
+          autocomplete="email"
+          [disabled]="isLoading">
       </div>
 
       <div class="form-group">
@@ -29,16 +34,14 @@
           type="password"
           name="password"
           placeholder="••••••••"
-          autocomplete="current-password">
+          autocomplete="current-password"
+          [disabled]="isLoading">
       </div>
 
-      <div *ngIf="errorMessage" class="error-message">
-        {{ errorMessage }}
-      </div>
-
-      <button class="btn-submit" type="button" (click)="Post()">
-        Sign In
-        <span class="btn-arrow">→</span>
+      <button class="btn-submit" type="button" (click)="Post()" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Sign In</span>
+        <span *ngIf="isLoading">Signing in...</span>
+        <span class="btn-arrow" *ngIf="!isLoading">→</span>
       </button>
 
     </form>
