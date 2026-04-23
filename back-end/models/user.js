@@ -8,7 +8,9 @@ var userSchema = new mongoose.Schema({
   email:      { type: String, required: true, unique: true },
   password:   { type: String, required: true },
   firstName:  String,
-  lastName:   String
+  lastName:   String,
+  resetToken: String,
+  resetTokenExpiry: Date
 });
 
 userSchema.pre('save', async function(next) {
@@ -23,6 +25,11 @@ userSchema.pre('save', async function(next) {
     next(err);
   }
 });
+
+// method to compare password for login
+userSchema.methods.comparePassword = async function(candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
 
 // module export needs reference to schema object
 module.exports = mongoose.model('User', userSchema);
