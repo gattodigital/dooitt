@@ -3,6 +3,7 @@ import { ApiService } from '../api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.css']
@@ -16,44 +17,66 @@ export class SignInComponent implements OnInit {
   ) { }
 
   signInData: any = {};
-  errorMessage = '';
-  isLoading = false;
+  errorMessage: string = '';
+  isLoading: boolean = false;
 
-  // Simple client-side validation; returns an error message or empty string
-  validate(): string {
-    const { email, password } = this.signInData;
-    if (!email || !email.trim()) {
-      return 'Email is required.';
+  TOKEN_KEY = 'token';
+
+  get authenticatedUser() {
+    return !!localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  validateForm(): boolean {
+    this.errorMessage = '';
+
+    if (!this.signInData.email || !this.signInData.email.trim()) {
+      this.errorMessage = 'Email is required.';
+      return false;
     }
-    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRe.test(email.trim())) {
-      return 'Please enter a valid email address.';
+
+    if (!this.signInData.password) {
+      this.errorMessage = 'Password is required.';
+      return false;
     }
-    if (!password) {
-      return 'Password is required.';
+
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.signInData.email.trim())) {
+      this.errorMessage = 'Please enter a valid email address.';
+      return false;
     }
-    return '';
+
+    return true;
   }
 
   Post() {
-    this.errorMessage = '';
-    const validationError = this.validate();
-    if (validationError) {
-      this.errorMessage = validationError;
+    if (!this.validateForm()) {
       return;
     }
 
     this.isLoading = true;
+    this.errorMessage = '';
+
     this.apiService.postUserSignIn(this.signInData).subscribe(
       res => {
         this.isLoading = false;
-        localStorage.setItem('token', res.token);
-        this.router.navigate(['/main']);
+        localStorage.setItem(this.TOKEN_KEY, res.token);
+        if (this.authenticatedUser) {
+          this.router.navigate(['/main']);
+        }
       },
-      err => {
+      (error) => {
         this.isLoading = false;
-        const msg = err && err.error && err.error.message;
-        this.errorMessage = msg || 'Sign-in failed. Please check your credentials.';
+
+        if (error.status === 401) {
+          this.errorMessage = 'Invalid email or password. Please try again.';
+        } else if (error.status === 429) {
+          this.errorMessage = 'Too many login attempts. Please try again later.';
+        } else if (error.error && error.error.message) {
+          this.errorMessage = error.error.message;
+        } else {
+          this.errorMessage = 'Sign-in failed. Please check your credentials and try again.';
+        }
       }
     );
   }

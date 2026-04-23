@@ -6,47 +6,82 @@ on:
       - main
       - master
 
+# Required for GitHub Pages deployment via Actions
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment at a time. cancel-in-progress is
+# intentionally false (per GitHub Pages best-practice) so an in-progress
+# deployment is never killed mid-way, which could leave Pages in a broken
+# state. Subsequent pushes queue and always deploy their own artifact.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
+  # ── Build ────────────────────────────────────────────────────────────────
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Node 20 LTS ships npm 10 which supports lockfileVersion 3
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
           cache-dependency-path: front-end/package-lock.json
 
       - name: Install dependencies
         working-directory: front-end
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
+      # Substitute the API URL placeholder if the secret is available.
+      # Emits a warning (not a hard error) so the build still succeeds when
+      # the secret has not been configured yet.
       - name: Set API URL
         working-directory: front-end
         env:
           API_URL: ${{ secrets.API_URL }}
         run: |
-          if [ -z "$API_URL" ]; then
-            echo "::error::API_URL secret is not set. Add it in Settings → Secrets → Actions before deploying." >&2
-            exit 1
+          if [ -n "$API_URL" ]; then
+            sed -i "s|__API_URL__|$API_URL|g" src/environments/environment.prod.ts
+          else
+            echo "::warning::API_URL secret is not set. The app will use the placeholder URL. Add it in Settings → Secrets → Actions."
           fi
-          sed -i "s|__API_URL__|$API_URL|g" src/environments/environment.prod.ts
 
+      # --configuration=production replaces the deprecated --prod flag
       - name: Build
         working-directory: front-end
-        env:
-          NODE_OPTIONS: --openssl-legacy-provider
-        run: npx ng build --prod
+        run: npx ng build --configuration production
 
-      - name: Copy index.html to 404.html (SPA routing fix)
+      # Needed for Angular SPA routing on GitHub Pages (handles 404 redirects)
+      - name: Copy index.html to 404.html
         run: cp front-end/dist/dooitt/index.html front-end/dist/dooitt/404.html
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      # Configure Pages and upload the built artifact (single artifact per run)
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: front-end/dist/dooitt
+          path: front-end/dist/dooitt
+
+  # ── Deploy ───────────────────────────────────────────────────────────────
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

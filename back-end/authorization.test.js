@@ -2,6 +2,7 @@
 
 // Set required env vars before loading any modules
 process.env.JWT_SECRET = 'test-secret-key-for-unit-tests';
+process.env.NODE_ENV = 'test';
 
 const express    = require('express');
 const bodyParser = require('body-parser');
@@ -68,7 +69,7 @@ describe('POST /authorization/sign-up', () => {
       .post('/authorization/sign-up')
       .send({ email: 'not-an-email', password: 'Password1' });
     expect(res.status).toBe(400);
-    expect(res.body.message).toMatch(/valid email/i);
+    expect(res.body.errors).toContain('Invalid email format.');
   });
 
   it('returns 400 when password is too short', async () => {
@@ -76,7 +77,7 @@ describe('POST /authorization/sign-up', () => {
       .post('/authorization/sign-up')
       .send({ email: 'user@example.com', password: 'Abc1' });
     expect(res.status).toBe(400);
-    expect(res.body.message).toMatch(/8 characters/i);
+    expect(res.body.errors).toContain('Password must be at least 8 characters long.');
   });
 
   it('returns 400 when password has no number', async () => {
@@ -84,7 +85,7 @@ describe('POST /authorization/sign-up', () => {
       .post('/authorization/sign-up')
       .send({ email: 'user@example.com', password: 'NoNumber!' });
     expect(res.status).toBe(400);
-    expect(res.body.message).toMatch(/letter and one number/i);
+    expect(res.body.errors).toContain('Password must contain at least one number.');
   });
 
   it('returns 400 when password has no letter', async () => {
@@ -92,14 +93,14 @@ describe('POST /authorization/sign-up', () => {
       .post('/authorization/sign-up')
       .send({ email: 'user@example.com', password: '12345678' });
     expect(res.status).toBe(400);
-    expect(res.body.message).toMatch(/letter and one number/i);
+    expect(res.body.errors).toContain('Password must contain at least one lowercase letter.');
   });
 
   it('returns 409 when email already exists', async () => {
     MockUserConstructor.findOne.mockResolvedValueOnce({ email: 'user@example.com' });
     const res = await supertest(app)
       .post('/authorization/sign-up')
-      .send({ email: 'user@example.com', password: 'Password1' });
+      .send({ email: 'user@example.com', password: 'Password1!' });
     expect(res.status).toBe(409);
     expect(res.body.message).toMatch(/already exists/i);
   });
@@ -110,7 +111,7 @@ describe('POST /authorization/sign-up', () => {
 
     const res = await supertest(app)
       .post('/authorization/sign-up')
-      .send({ email: 'new@example.com', password: 'Password1', firstName: 'Jane', lastName: 'Doe' });
+      .send({ email: 'new@example.com', password: 'Password1!', firstName: 'Jane', lastName: 'Doe' });
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('token');
     expect(typeof res.body.token).toBe('string');

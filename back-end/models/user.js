@@ -1,14 +1,16 @@
 var mongoose = require('mongoose');
 var bcrypt   = require('bcryptjs');
 
-var SALT_ROUNDS = 12;
+const SALT_ROUNDS = 12;
 
 // database schema objects
 var userSchema = new mongoose.Schema({
   email:      { type: String, required: true, unique: true },
   password:   { type: String, required: true },
   firstName:  String,
-  lastName:   String
+  lastName:   String,
+  resetToken: String,
+  resetTokenExpiry: Date
 });
 
 userSchema.pre('save', async function(next) {
@@ -17,13 +19,17 @@ userSchema.pre('save', async function(next) {
   if (!user.isModified('password'))
     return next();
   try {
-    var hash = await bcrypt.hash(user.password, SALT_ROUNDS);
-    user.password = hash;
+    user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
     next();
   } catch (err) {
     next(err);
   }
 });
+
+// method to compare password for login
+userSchema.methods.comparePassword = async function(candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
 
 // module export needs reference to schema object
 module.exports = mongoose.model('User', userSchema);

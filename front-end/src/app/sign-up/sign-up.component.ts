@@ -3,6 +3,7 @@ import { ApiService } from '../api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css']
@@ -17,60 +18,109 @@ export class SignUpComponent implements OnInit {
 
   signUpData: any = {};
   confirmPassword = '';
-  errorMessage = '';
-  isLoading = false;
+  errorMessage: string = '';
+  errorMessages: string[] = [];
+  isLoading: boolean = false;
 
-  // Client-side validation; returns an error message or empty string
-  validate(): string {
-    const { email, password, firstName, lastName } = this.signUpData;
+  TOKEN_KEY = 'token';
 
-    if (!firstName || !firstName.trim()) {
-      return 'First name is required.';
-    }
-    if (!lastName || !lastName.trim()) {
-      return 'Last name is required.';
-    }
-    if (!email || !email.trim()) {
-      return 'Email is required.';
-    }
-    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRe.test(email.trim())) {
-      return 'Please enter a valid email address.';
-    }
+  get authenticatedUser() {
+    return !!localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  validatePassword(password: string): { valid: boolean, errors: string[] } {
+    const errors: string[] = [];
+
     if (!password) {
-      return 'Password is required.';
+      errors.push('Password is required.');
+      return { valid: false, errors };
     }
+
     if (password.length < 8) {
-      return 'Password must be at least 8 characters long.';
+      errors.push('Password must be at least 8 characters long.');
     }
-    if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
-      return 'Password must contain at least one letter and one number.';
+
+    if (!/[a-z]/.test(password)) {
+      errors.push('Password must contain at least one lowercase letter.');
     }
-    if (password !== this.confirmPassword) {
-      return 'Passwords do not match.';
+
+    if (!/[A-Z]/.test(password)) {
+      errors.push('Password must contain at least one uppercase letter.');
     }
-    return '';
+
+    if (!/[0-9]/.test(password)) {
+      errors.push('Password must contain at least one number.');
+    }
+
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      errors.push('Password must contain at least one special character.');
+    }
+
+    return { valid: errors.length === 0, errors };
+  }
+
+  validateForm(): boolean {
+    this.errorMessage = '';
+    this.errorMessages = [];
+
+    if (!this.signUpData.email || !this.signUpData.email.trim()) {
+      this.errorMessages.push('Email is required.');
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(this.signUpData.email.trim())) {
+        this.errorMessages.push('Please enter a valid email address.');
+      }
+    }
+
+    const passwordValidation = this.validatePassword(this.signUpData.password);
+    if (!passwordValidation.valid) {
+      this.errorMessages.push(...passwordValidation.errors);
+    }
+
+    if (this.signUpData.password !== this.confirmPassword) {
+      this.errorMessages.push('Passwords do not match.');
+    }
+
+    if (this.errorMessages.length > 0) {
+      this.errorMessage = this.errorMessages.join(' ');
+      return false;
+    }
+
+    return true;
   }
 
   Post() {
-    this.errorMessage = '';
-    const validationError = this.validate();
-    if (validationError) {
-      this.errorMessage = validationError;
+    if (!this.validateForm()) {
       return;
     }
 
     this.isLoading = true;
+    this.errorMessage = '';
+    this.errorMessages = [];
+
     this.apiService.postUserSignUp(this.signUpData).subscribe(
       res => {
         this.isLoading = false;
-        localStorage.setItem('token', res.token);
-        this.router.navigate(['/sign-up/confirm']);
+        localStorage.setItem(this.TOKEN_KEY, res.token);
+        if (this.authenticatedUser) {
+          this.router.navigate(['/sign-up/confirm']);
+        }
       },
-      err => {
+      (error) => {
         this.isLoading = false;
-        const msg = err && err.error && err.error.message;
-        this.errorMessage = msg || 'Registration failed. Please try again.';
+
+        if (error.status === 409) {
+          this.errorMessage = 'An account with this email already exists. Please sign in instead.';
+        } else if (error.status === 429) {
+          this.errorMessage = 'Too many registration attempts. Please try again later.';
+        } else if (error.error && error.error.errors && Array.isArray(error.error.errors)) {
+          this.errorMessages = error.error.errors;
+          this.errorMessage = this.errorMessages.join(' ');
+        } else if (error.error && error.error.message) {
+          this.errorMessage = error.error.message;
+        } else {
+          this.errorMessage = 'Registration failed. Please try again.';
+        }
       }
     );
   }

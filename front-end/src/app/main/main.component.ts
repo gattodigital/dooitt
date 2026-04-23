@@ -4,6 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']

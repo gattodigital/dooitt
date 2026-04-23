@@ -24,7 +24,8 @@
           name="email"
           placeholder="you@example.com"
           autocomplete="email"
-          required>
+          required
+          [disabled]="isLoading">
       </div>
 
       <div class="form-group">
@@ -37,7 +38,8 @@
           name="password"
           placeholder="••••••••"
           autocomplete="current-password"
-          required>
+          required
+          [disabled]="isLoading">
       </div>
 
       <button class="btn-submit" type="submit" [disabled]="isLoading">

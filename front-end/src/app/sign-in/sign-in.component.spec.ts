@@ -23,32 +23,36 @@ describe('SignInComponent', () => {
 
     fixture = TestBed.createComponent(SignInComponent);
     component = fixture.componentInstance;
-    apiServiceSpy = TestBed.get(ApiService);
+    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('validate()', () => {
-    it('returns error when email is empty', () => {
+  describe('validateForm()', () => {
+    it('returns false when email is empty', () => {
       component.signInData = { email: '', password: 'Password1' };
-      expect(component.validate()).toMatch(/required/i);
+      expect(component.validateForm()).toBeFalse();
+      expect(component.errorMessage).toMatch(/required/i);
     });
 
-    it('returns error for invalid email format', () => {
+    it('returns false for invalid email format', () => {
       component.signInData = { email: 'not-an-email', password: 'Password1' };
-      expect(component.validate()).toMatch(/valid email/i);
+      expect(component.validateForm()).toBeFalse();
+      expect(component.errorMessage).toMatch(/valid email/i);
     });
 
-    it('returns error when password is empty', () => {
+    it('returns false when password is empty', () => {
       component.signInData = { email: 'user@example.com', password: '' };
-      expect(component.validate()).toMatch(/required/i);
+      expect(component.validateForm()).toBeFalse();
+      expect(component.errorMessage).toMatch(/required/i);
     });
 
-    it('returns empty string for valid data', () => {
+    it('returns true for valid data', () => {
       component.signInData = { email: 'user@example.com', password: 'Password1' };
-      expect(component.validate()).toBe('');
+      expect(component.validateForm()).toBeTrue();
+      expect(component.errorMessage).toBe('');
     });
   });
 

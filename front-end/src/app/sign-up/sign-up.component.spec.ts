@@ -23,69 +23,68 @@ describe('SignUpComponent', () => {
 
     fixture = TestBed.createComponent(SignUpComponent);
     component = fixture.componentInstance;
-    apiServiceSpy = TestBed.get(ApiService);
+    apiServiceSpy = TestBed.inject(ApiService) as jasmine.SpyObj<ApiService>;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('validate()', () => {
+  describe('validateForm()', () => {
     function validData() {
       return {
-        firstName: 'Jane',
-        lastName: 'Doe',
         email: 'jane@example.com',
-        password: 'Password1'
+        password: 'ValidPass123!'
       };
     }
 
-    it('returns error when firstName is empty', () => {
-      component.signUpData = { ...validData(), firstName: '' };
-      component.confirmPassword = 'Password1';
-      expect(component.validate()).toMatch(/first name/i);
-    });
-
-    it('returns error when lastName is empty', () => {
-      component.signUpData = { ...validData(), lastName: '' };
-      component.confirmPassword = 'Password1';
-      expect(component.validate()).toMatch(/last name/i);
+    it('allows missing first and last name', () => {
+      component.signUpData = { ...validData(), firstName: '', lastName: '' };
+      component.confirmPassword = 'ValidPass123!';
+      expect(component.validateForm()).toBeTrue();
+      expect(component.errorMessage).toBe('');
     });
 
     it('returns error when email is invalid', () => {
       component.signUpData = { ...validData(), email: 'bad-email' };
-      component.confirmPassword = 'Password1';
-      expect(component.validate()).toMatch(/valid email/i);
+      component.confirmPassword = 'ValidPass123!';
+      expect(component.validateForm()).toBeFalse();
+      expect(component.errorMessage).toMatch(/valid email/i);
     });
 
     it('returns error when password is too short', () => {
       component.signUpData = { ...validData(), password: 'Abc1' };
       component.confirmPassword = 'Abc1';
-      expect(component.validate()).toMatch(/8 characters/i);
+      expect(component.validateForm()).toBeFalse();
+      expect(component.errorMessage).toMatch(/8 characters/i);
     });
 
     it('returns error when password has no number', () => {
       component.signUpData = { ...validData(), password: 'NoNumbers!' };
       component.confirmPassword = 'NoNumbers!';
-      expect(component.validate()).toMatch(/letter and one number/i);
+      expect(component.validateForm()).toBeFalse();
+      expect(component.errorMessage).toMatch(/one number/i);
     });
 
     it('returns error when password has no letter', () => {
-      component.signUpData = { ...validData(), password: '123456789' };
-      component.confirmPassword = '123456789';
-      expect(component.validate()).toMatch(/letter and one number/i);
+      component.signUpData = { ...validData(), password: '12345678!' };
+      component.confirmPassword = '12345678!';
+      expect(component.validateForm()).toBeFalse();
+      expect(component.errorMessage).toMatch(/lowercase/i);
     });
 
     it('returns error when passwords do not match', () => {
       component.signUpData = validData();
       component.confirmPassword = 'DifferentPassword1';
-      expect(component.validate()).toMatch(/do not match/i);
+      expect(component.validateForm()).toBeFalse();
+      expect(component.errorMessage).toMatch(/do not match/i);
     });
 
-    it('returns empty string for valid data', () => {
+    it('returns true for valid data', () => {
       component.signUpData = validData();
-      component.confirmPassword = 'Password1';
-      expect(component.validate()).toBe('');
+      component.confirmPassword = 'ValidPass123!';
+      expect(component.validateForm()).toBeTrue();
+      expect(component.errorMessage).toBe('');
     });
   });
 
@@ -101,9 +100,9 @@ describe('SignUpComponent', () => {
     it('stores token and navigates on success', () => {
       component.signUpData = {
         firstName: 'Jane', lastName: 'Doe',
-        email: 'jane@example.com', password: 'Password1'
+        email: 'jane@example.com', password: 'ValidPass123!'
       };
-      component.confirmPassword = 'Password1';
+      component.confirmPassword = 'ValidPass123!';
       apiServiceSpy.postUserSignUp.and.returnValue(of({ token: 'mock-token' }));
       spyOn(localStorage, 'setItem');
 
@@ -115,9 +114,9 @@ describe('SignUpComponent', () => {
     it('sets errorMessage from server on API error', () => {
       component.signUpData = {
         firstName: 'Jane', lastName: 'Doe',
-        email: 'jane@example.com', password: 'Password1'
+        email: 'jane@example.com', password: 'ValidPass123!'
       };
-      component.confirmPassword = 'Password1';
+      component.confirmPassword = 'ValidPass123!';
       apiServiceSpy.postUserSignUp.and.returnValue(
         throwError({ error: { message: 'An account with this email already exists.' } })
       );
@@ -130,9 +129,9 @@ describe('SignUpComponent', () => {
     it('sets fallback errorMessage when server error has no message', () => {
       component.signUpData = {
         firstName: 'Jane', lastName: 'Doe',
-        email: 'jane@example.com', password: 'Password1'
+        email: 'jane@example.com', password: 'ValidPass123!'
       };
-      component.confirmPassword = 'Password1';
+      component.confirmPassword = 'ValidPass123!';
       apiServiceSpy.postUserSignUp.and.returnValue(throwError({}));
 
       component.Post();
