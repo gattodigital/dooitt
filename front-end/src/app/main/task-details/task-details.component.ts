@@ -3,6 +3,7 @@ import { ApiService } from 'src/app/api.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-task-details',
   templateUrl: './task-details.component.html',
   styleUrls: ['./task-details.component.css']

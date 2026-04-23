@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
+var bcrypt   = require('bcryptjs');
+
+const SALT_ROUNDS = 12;
 
 // database schema objects
 var userSchema = new mongoose.Schema({
@@ -9,17 +11,17 @@ var userSchema = new mongoose.Schema({
   lastName:   String
 });
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', async function(next) {
   var user = this;
   // condition to check if user had been modified
   if (!user.isModified('password'))
     return next();
-  // hash user password
-  bcrypt.hash(user.password, null, null, (err, hash) => {
-    if (err) return next(err);
-    user.password = hash;
+  try {
+    user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
     next();
-  });
+  } catch (err) {
+    next(err);
+  }
 });
 
 // module export needs reference to schema object

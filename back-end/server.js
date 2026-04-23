@@ -95,7 +95,7 @@ app.get('/profile/:id', profileLimiter, async (req, res) => {
 });
 
 // connect mongoose to db
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useCreateIndex: true })
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => {
     console.error('MongoDB connection error:', err);

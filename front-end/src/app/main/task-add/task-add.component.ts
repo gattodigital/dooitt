@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/api.service';
 
 @Component({
+  standalone: false,
   selector: 'app-task-add',
   templateUrl: './task-add.component.html',
   styleUrls: ['./task-add.component.css']

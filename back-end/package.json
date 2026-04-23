@@ -10,13 +10,13 @@
   "author": "Andres Ramirez",
   "license": "ISC",
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^3.0.0",
     "body-parser": "^1.20.3",
     "cors": "^2.8.4",
     "express": "^4.22.1",
     "express-rate-limit": "^8.3.2",
-    "jwt-simple": "^0.5.1",
-    "mongoose": "^6.13.6",
+    "jwt-simple": "^0.5.6",
+    "mongoose": "^8.0.0",
     "nodemon": "^3.1.14"
   }
 }

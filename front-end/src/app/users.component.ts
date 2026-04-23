@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from './api.service';
 
 @Component({
+  standalone: false,
   selector: 'users',
   template: `<div *ngFor="let user of apiService.users">
                <mat-card [routerLink]="['/profile', user._id]">{{ user.lastName }}, {{ user.firstName }}</mat-card>

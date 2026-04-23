@@ -1,4 +1,4 @@
-var bcrypt      = require('bcrypt-nodejs');
+var bcrypt      = require('bcryptjs');
 var jwt         = require('jwt-simple');
 var rateLimit   = require('express-rate-limit');
 var User        = require('./models/user.js');
@@ -71,18 +71,13 @@ router.post('/sign-in', async (req, res) => {
       return res.status(401).send({ message: 'Invalid email or password.' });
     }
 
-    bcrypt.compare(password, user.password, (err, isMatch) => {
-      if (err) {
-        console.error('bcrypt error:', err);
-        return res.status(500).send({ message: 'Internal server error.' });
-      }
+    const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         return res.status(401).send({ message: 'Invalid email or password.' });
       }
       let payload = { sub: user._id };
       let token = jwt.encode(payload, JWT_SECRET);
       res.status(200).send({ token });
-    });
   } catch (err) {
     console.error('Sign-in error:', err);
     res.status(500).send({ message: 'Internal server error.' });
