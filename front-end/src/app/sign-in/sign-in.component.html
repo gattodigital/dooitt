@@ -32,6 +32,10 @@
           autocomplete="current-password">
       </div>
 
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
       <button class="btn-submit" type="button" (click)="Post()">
         Sign In
         <span class="btn-arrow">→</span>

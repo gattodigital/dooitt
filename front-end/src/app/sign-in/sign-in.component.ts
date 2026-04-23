@@ -16,6 +16,7 @@ export class SignInComponent implements OnInit {
   ) { }
 
   signInData: any = {};
+  errorMessage: string = '';
 
   TOKEN_KEY = 'token';
 
@@ -24,6 +25,15 @@ export class SignInComponent implements OnInit {
   }
 
   Post() {
+    // Clear previous error message
+    this.errorMessage = '';
+
+    // Validate required fields
+    if (!this.signInData.email || !this.signInData.password) {
+      this.errorMessage = 'Email and password are required.';
+      return;
+    }
+
     this.apiService.postUserSignIn(this.signInData).subscribe(
       res => {
         localStorage.setItem('token', res.token);
@@ -31,8 +41,14 @@ export class SignInComponent implements OnInit {
           this.router.navigate(['/main']);
         }
       },
-      () => {
-        console.error('Sign-in failed. Please check your credentials.');
+      error => {
+        // Display error message from backend
+        if (error.error && error.error.message) {
+          this.errorMessage = error.error.message;
+        } else {
+          this.errorMessage = 'Sign-in failed. Please check your credentials.';
+        }
+        console.error('Sign-in error:', error);
       }
     );
   }

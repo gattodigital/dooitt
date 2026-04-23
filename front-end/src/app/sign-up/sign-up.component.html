@@ -52,8 +52,24 @@
           [(ngModel)]="signUpData.password"
           type="password"
           name="password"
-          placeholder="Create a strong password"
+          placeholder="Create a strong password (8+ chars)"
           autocomplete="new-password">
+        <small class="form-hint">Must be 8+ characters with uppercase, lowercase, and number</small>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <input
+          class="form-input"
+          [(ngModel)]="confirmPassword"
+          type="password"
+          name="confirmPassword"
+          placeholder="Re-enter your password"
+          autocomplete="new-password">
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
       </div>
 
       <button class="btn-submit" type="button" (click)="Post()">
