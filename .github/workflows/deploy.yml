@@ -58,7 +58,7 @@ jobs:
       # --configuration=production replaces the deprecated --prod flag
       - name: Build
         working-directory: front-end
-        run: npx ng build --configuration=production
+        run: npx ng build --configuration production
 
       # Needed for Angular SPA routing on GitHub Pages (handles 404 redirects)
       - name: Copy index.html to 404.html

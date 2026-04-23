@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt');
+var bcrypt   = require('bcryptjs');
 
 const SALT_ROUNDS = 12;
 
@@ -18,13 +18,11 @@ userSchema.pre('save', async function(next) {
   // condition to check if user had been modified
   if (!user.isModified('password'))
     return next();
-  // hash user password with modern bcrypt
   try {
-    const hash = await bcrypt.hash(user.password, SALT_ROUNDS);
-    user.password = hash;
+    user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
     next();
   } catch (err) {
-    return next(err);
+    next(err);
   }
 });
 

@@ -3,6 +3,7 @@ import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-portal',
   templateUrl: './portal.component.html',
   styleUrls: ['./portal.component.css']

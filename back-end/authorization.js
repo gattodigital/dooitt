@@ -1,3 +1,4 @@
+var bcrypt      = require('bcryptjs');
 var jwt         = require('jwt-simple');
 var rateLimit   = require('express-rate-limit');
 var crypto      = require('crypto');
@@ -110,30 +111,13 @@ router.post('/sign-in', async (req, res) => {
       return res.status(401).send({ message: 'Invalid email or password.' });
     }
 
-    // Use the comparePassword method from user model
-    const isMatch = await user.comparePassword(password);
-
-    if (!isMatch) {
-      return res.status(401).send({ message: 'Invalid email or password.' });
-    }
-
-    // Create JWT token with expiration
-    let payload = {
-      sub: user._id,
-      iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + TOKEN_EXPIRY
-    };
-    let token = jwt.encode(payload, JWT_SECRET);
-
-    res.status(200).send({
-      token,
-      user: {
-        id: user._id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName
+    const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(401).send({ message: 'Invalid email or password.' });
       }
-    });
+      let payload = { sub: user._id };
+      let token = jwt.encode(payload, JWT_SECRET);
+      res.status(200).send({ token });
   } catch (err) {
     console.error('Sign-in error:', err);
     res.status(500).send({ message: 'Internal server error.' });

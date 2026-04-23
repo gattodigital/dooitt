@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
+  standalone: false,
   selector: 'profile',
   template: `
     <mat-card>
