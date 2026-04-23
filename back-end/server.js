@@ -5,6 +5,7 @@ var bodyParser    = require('body-parser');
 var mongoose      = require('mongoose');
 var rateLimit     = require('express-rate-limit');
 var authorization = require('./authorization');
+var requireAuth   = require('./authMiddleware');
 
 const port = process.env.PORT || 3000;
 
@@ -33,7 +34,7 @@ const apiLimiter = rateLimit({
 app.use(['/tasks', '/tasks/:id', '/users', '/profile/:id'], apiLimiter);
 
 // post tasks to database
-app.post('/tasks', async (req, res) => {
+app.post('/tasks', requireAuth, async (req, res) => {
   try {
     let task = new Task(req.body);
     await task.save();
@@ -45,7 +46,7 @@ app.post('/tasks', async (req, res) => {
 });
 
 // get tasks end point
-app.get('/tasks', async (req, res) => {
+app.get('/tasks', requireAuth, async (req, res) => {
   try {
     let tasks = await Task.find({});
     res.send(tasks);
@@ -56,7 +57,7 @@ app.get('/tasks', async (req, res) => {
 });
 
 // get task details
-app.get('/tasks/:id', async (req, res) => {
+app.get('/tasks/:id', requireAuth, async (req, res) => {
   try {
     let task = await Task.findById(req.params.id);
     if (!task) {
@@ -70,7 +71,7 @@ app.get('/tasks/:id', async (req, res) => {
 });
 
 // get users end point
-app.get('/users', async (req, res) => {
+app.get('/users', requireAuth, async (req, res) => {
   try {
     let users = await User.find({}, '-password -__v');
     res.send(users);
@@ -81,7 +82,7 @@ app.get('/users', async (req, res) => {
 });
 
 // get profiles end point
-app.get('/profile/:id', profileLimiter, async (req, res) => {
+app.get('/profile/:id', requireAuth, profileLimiter, async (req, res) => {
   try {
     let user = await User.findById(req.params.id, '-password -__v');
     if (!user) {

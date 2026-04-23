@@ -16,6 +16,8 @@ export class SignUpComponent implements OnInit {
   ) { }
 
   signUpData: any = {};
+  confirmPassword: string = '';
+  errorMessage: string = '';
 
   TOKEN_KEY = 'token';
 
@@ -24,6 +26,34 @@ export class SignUpComponent implements OnInit {
   }
 
   Post() {
+    // Clear previous error message
+    this.errorMessage = '';
+
+    // Validate required fields
+    if (!this.signUpData.email || !this.signUpData.password) {
+      this.errorMessage = 'Email and password are required.';
+      return;
+    }
+
+    // Validate password strength
+    if (this.signUpData.password.length < 8) {
+      this.errorMessage = 'Password must be at least 8 characters long.';
+      return;
+    }
+
+    if (!/[a-z]/.test(this.signUpData.password) ||
+        !/[A-Z]/.test(this.signUpData.password) ||
+        !/[0-9]/.test(this.signUpData.password)) {
+      this.errorMessage = 'Password must contain at least one lowercase letter, one uppercase letter, and one number.';
+      return;
+    }
+
+    // Validate password confirmation
+    if (this.signUpData.password !== this.confirmPassword) {
+      this.errorMessage = 'Passwords do not match.';
+      return;
+    }
+
     this.apiService.postUserSignUp(this.signUpData).subscribe(
       res => {
         localStorage.setItem('token', res.token);
@@ -31,8 +61,14 @@ export class SignUpComponent implements OnInit {
           this.router.navigate(['/sign-up/confirm']);
         }
       },
-      () => {
-        console.error('Registration failed. Please try again.');
+      error => {
+        // Display error message from backend
+        if (error.error && error.error.message) {
+          this.errorMessage = error.error.message;
+        } else {
+          this.errorMessage = 'Registration failed. Please try again.';
+        }
+        console.error('Registration error:', error);
       }
     );
   }
