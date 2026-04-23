@@ -41,6 +41,14 @@ router.post('/sign-up', async (req, res) => {
     // Normalize email to lowercase
     email = String(email).toLowerCase().trim();
 
+    // Password strength validation
+    if (password.length < 8) {
+      return res.status(400).send({ message: 'Password must be at least 8 characters long.' });
+    }
+    if (!/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
+      return res.status(400).send({ message: 'Password must contain at least one lowercase letter, one uppercase letter, and one number.' });
+    }
+
     // Check for duplicate email
     let existing = await User.findOne({ email });
     if (existing) {
