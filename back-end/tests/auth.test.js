@@ -64,14 +64,20 @@ jest.mock('../models/user', () => MockUser);
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const authorization = require('../authorization');
 const User = require('../models/user');
 const { requireAuth } = require('../middleware/auth');
 
 // Create test app
 const app = express();
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // high enough to avoid flaky tests while still enforcing rate limiting
+});
 app.use(cors());
 app.use(bodyParser.json());
+app.use(limiter);
 app.use('/authorization', authorization);
 
 // Test protected route
